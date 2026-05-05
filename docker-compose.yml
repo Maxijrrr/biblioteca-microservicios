@@ -1,0 +1,376 @@
+version: '3.8'
+
+networks:
+  red_interna_proyecto:
+    driver: bridge
+
+volumes:
+  persistencia_db_autenticador:
+  persistencia_db_catalogo:
+  persistencia_db_devoluciones:
+  persistencia_db_ebooks:
+  persistencia_db_inventario:
+  persistencia_db_penalizaciones:
+  persistencia_db_perfiles:
+  persistencia_db_prestamos:
+  persistencia_db_reservas:
+  persistencia_db_sucursales:
+
+services:
+
+  # ======================================================
+  # BASES DE DATOS INDEPENDIENTES (Database-per-Service)
+  # ======================================================
+
+  db-autenticador:
+    image: mysql:8.0
+    container_name: mysql_autenticador
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_autenticador
+    ports:
+      - "3306:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_autenticador:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-catalogo:
+    image: mysql:8.0
+    container_name: mysql_catalogo
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_catalogo
+    ports:
+      - "3307:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_catalogo:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-devoluciones:
+    image: mysql:8.0
+    container_name: mysql_devoluciones
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_devoluciones
+    ports:
+      - "3308:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_devoluciones:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-ebooks:
+    image: mysql:8.0
+    container_name: mysql_ebooks
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_ebooks
+    ports:
+      - "3309:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_ebooks:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-inventario:
+    image: mysql:8.0
+    container_name: mysql_inventario
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_inventario
+    ports:
+      - "3310:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_inventario:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-penalizaciones:
+    image: mysql:8.0
+    container_name: mysql_penalizaciones
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_penalizaciones
+    ports:
+      - "3311:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_penalizaciones:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-perfiles:
+    image: mysql:8.0
+    container_name: mysql_perfiles
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_perfiles
+    ports:
+      - "3312:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_perfiles:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-prestamos:
+    image: mysql:8.0
+    container_name: mysql_prestamos
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_prestamos
+    ports:
+      - "3313:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_prestamos:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-reservas:
+    image: mysql:8.0
+    container_name: mysql_reservas
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_reservas
+    ports:
+      - "3314:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_reservas:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  db-sucursales:
+    image: mysql:8.0
+    container_name: mysql_sucursales
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db_sucursales
+    ports:
+      - "3315:3306"
+    networks:
+      - red_interna_proyecto
+    volumes:
+      - persistencia_db_sucursales:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ======================================================
+  # LOS 10 MICROSERVICIOS (build con Dockerfile propio)
+  # ======================================================
+
+  ms-autenticador:
+    build: ./codigo-fuente/ms-autenticador
+    container_name: ms-autenticador
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-autenticador:3306/db_autenticador?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-autenticador:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-catalogo:
+    build: ./codigo-fuente/ms-catalogo
+    container_name: ms-catalogo
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-catalogo:3306/db_catalogo?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-catalogo:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-devoluciones:
+    build: ./codigo-fuente/ms-devoluciones
+    container_name: ms-devoluciones
+    ports:
+      - "8082:8082"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-devoluciones:3306/db_devoluciones?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - PRESTAMOS_URL=http://ms-prestamos:8087
+    depends_on:
+      db-devoluciones:
+        condition: service_healthy
+      ms-prestamos:
+        condition: service_started
+    networks:
+      - red_interna_proyecto
+
+  ms-ebooks:
+    build: ./codigo-fuente/ms-ebooks
+    container_name: ms-ebooks
+    ports:
+      - "8083:8083"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-ebooks:3306/db_ebooks?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-ebooks:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-inventario:
+    build: ./codigo-fuente/ms-inventario
+    container_name: ms-inventario
+    ports:
+      - "8084:8084"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-inventario:3306/db_inventario?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-inventario:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-penalizaciones:
+    build: ./codigo-fuente/ms-penalizaciones
+    container_name: ms-penalizaciones
+    ports:
+      - "8085:8085"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-penalizaciones:3306/db_penalizaciones?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-penalizaciones:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-perfiles:
+    build: ./codigo-fuente/ms-perfiles
+    container_name: ms-perfiles
+    ports:
+      - "8086:8086"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-perfiles:3306/db_perfiles?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-perfiles:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-prestamos:
+    build: ./codigo-fuente/ms-prestamos
+    container_name: ms-prestamos
+    ports:
+      - "8087:8087"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-prestamos:3306/db_prestamos?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+      - PERFILES_URL=http://ms-perfiles:8086
+      - INVENTARIO_URL=http://ms-inventario:8084
+    depends_on:
+      db-prestamos:
+        condition: service_healthy
+      ms-perfiles:
+        condition: service_started
+      ms-inventario:
+        condition: service_started
+    networks:
+      - red_interna_proyecto
+
+  ms-reservas:
+    build: ./codigo-fuente/ms-reservas
+    container_name: ms-reservas
+    ports:
+      - "8088:8088"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-reservas:3306/db_reservas?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-reservas:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto
+
+  ms-sucursales:
+    build: ./codigo-fuente/ms-sucursales
+    container_name: ms-sucursales
+    ports:
+      - "8089:8089"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://db-sucursales:3306/db_sucursales?useSSL=false&allowPublicKeyRetrieval=true
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=root
+    depends_on:
+      db-sucursales:
+        condition: service_healthy
+    networks:
+      - red_interna_proyecto

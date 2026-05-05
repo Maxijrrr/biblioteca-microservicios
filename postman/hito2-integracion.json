@@ -1,0 +1,335 @@
+{
+  "info": {
+    "name": "Hito 2 — Integración Biblioteca Microservicios",
+    "_postman_id": "biblioteca-hito2-2026",
+    "description": "Colección de pruebas de integración E2E para el Hito 2 del proyecto Biblioteca Microservicios.\nIntegrantes: Maximiliano Valenzuela, Genesis Cerda, Vicente Hueichapan\nDSY1103 - Desarrollo FullStack 1 - Duoc UC 2026",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://3.91.218.133",
+      "type": "string",
+      "description": "IP publica de la instancia AWS EC2"
+    }
+  ],
+  "item": [
+    {
+      "name": "ms-sucursales :8089 — CRUD Completo",
+      "item": [
+        {
+          "name": "POST Crear Sucursal",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreSede\": \"Sede Central Duoc\",\n  \"direccion\": \"Av. Principal 123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8089/api/sucursales",
+              "host": ["{{base_url}}"],
+              "port": "8089",
+              "path": ["api", "sucursales"]
+            },
+            "description": "Crea una nueva sucursal. Respuesta esperada: HTTP 201 con {idSucursal, nombreSede, direccion}."
+          }
+        },
+        {
+          "name": "GET Listar Sucursales",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8089/api/sucursales",
+              "host": ["{{base_url}}"],
+              "port": "8089",
+              "path": ["api", "sucursales"]
+            },
+            "description": "Lista todas las sucursales. Respuesta esperada: HTTP 200 con array de sucursales."
+          }
+        },
+        {
+          "name": "PUT Actualizar Sucursal",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nombreSede\": \"Sede Central ACTUALIZADA\",\n  \"direccion\": \"Avenida Nueva 999\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8089/api/sucursales/1",
+              "host": ["{{base_url}}"],
+              "port": "8089",
+              "path": ["api", "sucursales", "1"]
+            },
+            "description": "Actualiza una sucursal por ID. Respuesta esperada: HTTP 200."
+          }
+        },
+        {
+          "name": "DELETE Eliminar Sucursal",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8089/api/sucursales/1",
+              "host": ["{{base_url}}"],
+              "port": "8089",
+              "path": ["api", "sucursales", "1"]
+            },
+            "description": "Elimina una sucursal. Respuesta esperada: HTTP 204 No Content."
+          }
+        }
+      ]
+    },
+    {
+      "name": "ms-reservas :8088 — CRUD Completo",
+      "item": [
+        {
+          "name": "POST Crear Reserva",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\",\n  \"prioridad\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8088/api/reservas",
+              "host": ["{{base_url}}"],
+              "port": "8088",
+              "path": ["api", "reservas"]
+            },
+            "description": "Crea una reserva. Respuesta esperada: HTTP 201 con {idReserva, idPerfil, isbn, prioridad}."
+          }
+        },
+        {
+          "name": "GET Obtener Reserva por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8088/api/reservas/1",
+              "host": ["{{base_url}}"],
+              "port": "8088",
+              "path": ["api", "reservas", "1"]
+            },
+            "description": "Obtiene una reserva por ID. Respuesta esperada: HTTP 200."
+          }
+        },
+        {
+          "name": "PUT Actualizar Reserva",
+          "request": {
+            "method": "PUT",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"123-456\",\n  \"prioridad\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8088/api/reservas/1",
+              "host": ["{{base_url}}"],
+              "port": "8088",
+              "path": ["api", "reservas", "1"]
+            },
+            "description": "Actualiza una reserva. Respuesta esperada: HTTP 200."
+          }
+        }
+      ]
+    },
+    {
+      "name": "ms-devoluciones :8082 — CRUD Completo",
+      "item": [
+        {
+          "name": "POST Registrar Devolucion",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPrestamo\": 1\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8082/api/devoluciones",
+              "host": ["{{base_url}}"],
+              "port": "8082",
+              "path": ["api", "devoluciones"]
+            },
+            "description": "Registra la devolución de un préstamo. Respuesta esperada: HTTP 201 con {idDevolucion, idPrestamo, fechaEntrega}."
+          }
+        }
+      ]
+    },
+    {
+      "name": "ms-perfiles :8086 — CRUD Completo",
+      "item": [
+        {
+          "name": "POST Crear Perfil",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"rut\": \"12345678-9\",\n  \"nombre\": \"Juan Perez\",\n  \"correo\": \"juan@duoc.cl\",\n  \"carrera\": \"Informatica\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8086/api/perfil",
+              "host": ["{{base_url}}"],
+              "port": "8086",
+              "path": ["api", "perfil"]
+            },
+            "description": "Crea un perfil de alumno en ms-perfiles. Respuesta esperada: HTTP 201."
+          }
+        },
+        {
+          "name": "GET Listar Perfiles",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8086/api/perfil",
+              "host": ["{{base_url}}"],
+              "port": "8086",
+              "path": ["api", "perfil"]
+            }
+          }
+        },
+        {
+          "name": "GET Obtener Perfil por ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8086/api/perfil/1",
+              "host": ["{{base_url}}"],
+              "port": "8086",
+              "path": ["api", "perfil", "1"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ms-inventario :8084 — CRUD Completo",
+      "item": [
+        {
+          "name": "POST Registrar Stock",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isbn\": \"978-3-16-148410-0\",\n  \"idSucursal\": 1,\n  \"stockTotal\": 5,\n  \"stockDisponible\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8084/api/inventario",
+              "host": ["{{base_url}}"],
+              "port": "8084",
+              "path": ["api", "inventario"]
+            },
+            "description": "Registra stock de un libro. Respuesta esperada: HTTP 201."
+          }
+        },
+        {
+          "name": "GET Listar Inventario",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8084/api/inventario",
+              "host": ["{{base_url}}"],
+              "port": "8084",
+              "path": ["api", "inventario"]
+            }
+          }
+        },
+        {
+          "name": "GET Inventario por ISBN",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8084/api/inventario/isbn/978-3-16-148410-0",
+              "host": ["{{base_url}}"],
+              "port": "8084",
+              "path": ["api", "inventario", "isbn", "978-3-16-148410-0"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "ms-prestamos :8087 — FEIGN E2E",
+      "item": [
+        {
+          "name": "POST Crear Prestamo (PRUEBA FEIGN E2E)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8087/api/prestamos",
+              "host": ["{{base_url}}"],
+              "port": "8087",
+              "path": ["api", "prestamos"]
+            },
+            "description": "PRUEBA DE FUEGO FEIGN: ms-prestamos consulta internamente a ms-perfiles (GET /api/perfil/{id}) y ms-inventario (GET /api/inventario/isbn/{isbn}). Demuestra comunicación entre 3 microservicios via Feign Client."
+          }
+        },
+        {
+          "name": "POST Prestamo - Perfil Inexistente (debe retornar 404)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPerfil\": 99999,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8087/api/prestamos",
+              "host": ["{{base_url}}"],
+              "port": "8087",
+              "path": ["api", "prestamos"]
+            },
+            "description": "ms-prestamos llama a ms-perfiles con ID inexistente. Debe retornar HTTP 404 con {\"error\":\"Perfil no encontrado para el prestamo\"}."
+          }
+        },
+        {
+          "name": "POST Prestamo - ms-perfiles APAGADO (debe retornar 503)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}:8087/api/prestamos",
+              "host": ["{{base_url}}"],
+              "port": "8087",
+              "path": ["api", "prestamos"]
+            },
+            "description": "PRECONDICION: Ejecutar 'docker stop ms-perfiles' antes de lanzar esta request. Debe retornar HTTP 503 con {\"error\":\"Servicio de perfiles no disponible en este momento\"}. Demuestra resiliencia del sistema."
+          }
+        },
+        {
+          "name": "GET Listar Prestamos",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}:8087/api/prestamos",
+              "host": ["{{base_url}}"],
+              "port": "8087",
+              "path": ["api", "prestamos"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

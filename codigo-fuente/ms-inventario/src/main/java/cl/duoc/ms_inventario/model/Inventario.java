@@ -1,0 +1,26 @@
+package cl.duoc.ms_inventario.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "inventario")
+@Data
+public class Inventario {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_inventario")
+    private Long idInventario;
+
+    @Column(name = "isbn", nullable = false)
+    private String isbn;
+
+    @Column(name = "id_sucursal", nullable = false)
+    private Long idSucursal;
+
+    @Column(name = "stock_total", nullable = false)
+    private Integer stockTotal;
+
+    @Column(name = "stock_disponible", nullable = false)
+    private Integer stockDisponible;
+}
