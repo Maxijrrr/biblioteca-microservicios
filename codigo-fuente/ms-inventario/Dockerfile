@@ -1,4 +1,4 @@
-﻿# ---- Etapa 1: Compilacion ----
+# ---- Etapa 1: Compilacion ----
 FROM maven:3.9-eclipse-temurin-21 AS build
 WORKDIR /app
 

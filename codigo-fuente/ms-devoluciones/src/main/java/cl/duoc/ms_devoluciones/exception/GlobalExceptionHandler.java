@@ -1,4 +1,4 @@
-﻿package cl.duoc.ms_devoluciones._exception;
+package cl.duoc.ms_devoluciones._exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
