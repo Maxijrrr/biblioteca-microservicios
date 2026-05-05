@@ -1,4 +1,4 @@
-package cl.duoc.ms_reservas._exception;
+package cl.duoc.ms_reservas.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

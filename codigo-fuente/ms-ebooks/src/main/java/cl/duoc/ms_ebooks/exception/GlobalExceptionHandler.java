@@ -1,4 +1,4 @@
-package cl.duoc.ms_ebooks._exception;
+package cl.duoc.ms_ebooks.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
