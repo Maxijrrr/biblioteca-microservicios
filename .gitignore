@@ -1,0 +1,22 @@
+# Archivos compilados / targets Maven
+**/target/
+
+# Archivos IDE
+.idea/
+*.iml
+.vscode/
+*.code-workspace
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Variables de entorno locales
+.env
+*.env
+
+# Logs
+*.log
+
+# Archivos de configuracion local
+application-local.properties
