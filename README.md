@@ -10,9 +10,9 @@ Repositorio: https://github.com/Maxijrrr/biblioteca-microservicios
 
 | Nombre | Responsabilidad |
 |:--|:--|
-| Maximiliano Valenzuela | ms-autenticador, ms-catalogo, ms-prestamos |
-| Genesis Cerda | ms-perfiles, ms-inventario, ms-devoluciones |
-| Vicente Hueichapan | ms-ebooks, ms-penalizaciones, ms-reservas, ms-sucursales |
+| Maximiliano Valenzuela | ms-autenticador, ms-ebooks, ms-prestamos |
+| Genesis Cerda | ms-perfiles, ms-inventario, ms-penalizaciones |
+| Vicente Hueichapan | ms-catalogo, ms-delociones, ms-reservas, ms-sucursales |
 
 ---
 
