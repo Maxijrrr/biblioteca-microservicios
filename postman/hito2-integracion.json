@@ -201,10 +201,10 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}:8086/api/perfil/1",
+              "raw": "{{base_url}}:8086/api/perfiles/1",
               "host": ["{{base_url}}"],
               "port": "8086",
-              "path": ["api", "perfil", "1"]
+              "path": ["api", "perfiles", "1"]
             }
           }
         }
@@ -272,12 +272,12 @@
               "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos",
+              "raw": "{{base_url}}:8087/api/prestamos/solicitar",
               "host": ["{{base_url}}"],
               "port": "8087",
-              "path": ["api", "prestamos"]
+              "path": ["api", "prestamos", "solicitar"]
             },
-            "description": "PRUEBA DE FUEGO FEIGN: ms-prestamos consulta internamente a ms-perfiles (GET /api/perfil/{id}) y ms-inventario (GET /api/inventario/isbn/{isbn}). Demuestra comunicación entre 3 microservicios via Feign Client."
+            "description": "PRUEBA DE FUEGO FEIGN: ms-prestamos consulta internamente a ms-perfiles (GET /api/perfiles/{id}) y ms-inventario (GET /api/inventario/isbn/{isbn}). Demuestra comunicación entre 3 microservicios via Feign Client."
           }
         },
         {
@@ -290,10 +290,10 @@
               "raw": "{\n  \"idPerfil\": 99999,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos",
+              "raw": "{{base_url}}:8087/api/prestamos/solicitar",
               "host": ["{{base_url}}"],
               "port": "8087",
-              "path": ["api", "prestamos"]
+              "path": ["api", "prestamos", "solicitar"]
             },
             "description": "ms-prestamos llama a ms-perfiles con ID inexistente. Debe retornar HTTP 404 con {\"error\":\"Perfil no encontrado para el prestamo\"}."
           }
@@ -308,10 +308,10 @@
               "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos",
+              "raw": "{{base_url}}:8087/api/prestamos/solicitar",
               "host": ["{{base_url}}"],
               "port": "8087",
-              "path": ["api", "prestamos"]
+              "path": ["api", "prestamos", "solicitar"]
             },
             "description": "PRECONDICION: Ejecutar 'docker stop ms-perfiles' antes de lanzar esta request. Debe retornar HTTP 503 con {\"error\":\"Servicio de perfiles no disponible en este momento\"}. Demuestra resiliencia del sistema."
           }

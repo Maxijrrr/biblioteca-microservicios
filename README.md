@@ -1,278 +1,309 @@
-# 📚 Sistema de Gestión Bibliotecaria — Hito 2
+# Sistema de Gestion Bibliotecaria - Hito 2
 
-Sistema de gestión bibliotecaria construido con arquitectura de microservicios Spring Boot, Docker y MySQL.
+Sistema de gestion bibliotecaria construido con arquitectura de microservicios, Spring Boot, Docker Compose y MySQL. El proyecto aplica el patron Database per Service: cada microservicio tiene su propia base de datos y no accede directamente a la base de otro servicio.
+
+Repositorio: https://github.com/Maxijrrr/biblioteca-microservicios
 
 ---
 
-## 👥 Integrantes
+## Integrantes
 
-| Nombre | Rol |
-|--------|-----|
+| Nombre | Responsabilidad |
+|:--|:--|
 | Maximiliano Valenzuela | ms-autenticador, ms-catalogo, ms-prestamos |
 | Genesis Cerda | ms-perfiles, ms-inventario, ms-devoluciones |
 | Vicente Hueichapan | ms-ebooks, ms-penalizaciones, ms-reservas, ms-sucursales |
 
 ---
 
-## 📊 Estado del Sistema (Hito 2)
+## Estado del Sistema
 
-| Microservicio     | Puerto | DB Name              | Funcionalidad                           |
-|:------------------|:------:|:---------------------|:----------------------------------------|
-| ms-autenticador   | 8080   | db_autenticador      | Registro, Login y seguridad perimetral  |
-| ms-catalogo       | 8081   | db_catalogo          | Catálogo de libros y gestión de existencias |
-| ms-devoluciones   | 8082   | db_devoluciones      | Gestión de devolución de libros físicos |
-| ms-ebooks         | 8083   | db_ebooks            | Administración de libros digitales      |
-| ms-inventario     | 8084   | db_inventario        | Control de inventario por sucursal      |
-| ms-penalizaciones | 8085   | db_penalizaciones    | Gestión de multas por retrasos o daños  |
-| ms-perfiles       | 8086   | db_perfiles          | Perfiles de usuarios registrados y roles|
-| ms-prestamos      | 8087   | db_prestamos         | Préstamos de libros y control de plazos |
-| ms-reservas       | 8088   | db_reservas          | Reservas de libros no disponibles       |
-| ms-sucursales     | 8089   | db_sucursales        | Sedes físicas donde se encuentran libros|
-
----
-
-## 🏗️ Arquitectura Database-per-Service
-
-Cada microservicio es **dueño exclusivo** de su base de datos. Ningún servicio accede directamente a la BD de otro: la comunicación es **exclusivamente por API REST**.
-
-```
-ms-autenticador  ──▶ db_autenticador  (MySQL :3306)
-ms-catalogo      ──▶ db_catalogo      (MySQL :3307)
-ms-devoluciones  ──▶ db_devoluciones  (MySQL :3308)
-ms-ebooks        ──▶ db_ebooks        (MySQL :3309)
-ms-inventario    ──▶ db_inventario    (MySQL :3310)
-ms-penalizaciones──▶ db_penalizaciones(MySQL :3311)
-ms-perfiles      ──▶ db_perfiles      (MySQL :3312)
-ms-prestamos     ──▶ db_prestamos     (MySQL :3313)
-ms-reservas      ──▶ db_reservas      (MySQL :3314)
-ms-sucursales    ──▶ db_sucursales    (MySQL :3315)
-```
+| Microservicio | Puerto app | Base de datos | Puerto DB local | Responsabilidad |
+|:--|:--:|:--|:--:|:--|
+| ms-autenticador | 8080 | db_autenticador | 3306 | Registro, login y gestion de credenciales |
+| ms-catalogo | 8081 | db_catalogo | 3307 | Catalogo de libros |
+| ms-devoluciones | 8082 | db_devoluciones | 3308 | Devoluciones de prestamos |
+| ms-ebooks | 8083 | db_ebooks | 3309 | Libros digitales |
+| ms-inventario | 8084 | db_inventario | 3310 | Stock por ISBN y sucursal |
+| ms-penalizaciones | 8085 | db_penalizaciones | 3311 | Penalizaciones por retrasos o danos |
+| ms-perfiles | 8086 | db_perfiles | 3312 | Perfiles de usuarios |
+| ms-prestamos | 8087 | db_prestamos | 3313 | Prestamos de libros |
+| ms-reservas | 8088 | db_reservas | 3314 | Reservas |
+| ms-sucursales | 8089 | db_sucursales | 3315 | Sucursales fisicas |
 
 ---
 
-## 🔗 Comunicación entre Microservicios (Hito 2)
+## Arquitectura Database per Service
 
-### Diagrama de dependencias
+Cada servicio es dueno exclusivo de su base de datos. La comunicacion entre dominios se realiza por HTTP/REST mediante clientes declarativos Feign, nunca por acceso directo a tablas externas.
 
-```
-┌──────────────────┐   GET /api/perfil/{id}          ┌─────────────────┐
-│  ms-prestamos    │ ─────────────────────────────▶  │  ms-perfiles    │
-│     :8087        │                                  │     :8086       │
-│                  │   GET /api/inventario/isbn/{isbn}┌─────────────────┐
-│                  │ ─────────────────────────────▶  │  ms-inventario  │
-└──────────────────┘                                  │     :8084       │
-                                                      └─────────────────┘
-
-┌──────────────────┐   GET /api/prestamos/{id}        ┌─────────────────┐
-│  ms-devoluciones │ ─────────────────────────────▶   │  ms-prestamos   │
-│     :8082        │                                   │     :8087       │
-└──────────────────┘                                   └─────────────────┘
+```text
+ms-autenticador   -> db_autenticador
+ms-catalogo       -> db_catalogo
+ms-devoluciones   -> db_devoluciones
+ms-ebooks         -> db_ebooks
+ms-inventario     -> db_inventario
+ms-penalizaciones -> db_penalizaciones
+ms-perfiles       -> db_perfiles
+ms-prestamos      -> db_prestamos
+ms-reservas       -> db_reservas
+ms-sucursales     -> db_sucursales
 ```
 
-### Tabla de contratos API
-
-| Origen           | Destino        | Método | Endpoint                        | DTO respuesta   |
-|:-----------------|:---------------|:------:|:--------------------------------|:----------------|
-| ms-prestamos     | ms-perfiles    | GET    | `/api/perfil/{id}`              | `PerfilDTO`     |
-| ms-prestamos     | ms-inventario  | GET    | `/api/inventario/isbn/{isbn}`   | `InventarioDTO` |
-| ms-devoluciones  | ms-prestamos   | GET    | `/api/prestamos/{id}`           | `PrestamoDTO`   |
-
-### Tecnología utilizada
-
-- **Cliente REST:** OpenFeign (`spring-cloud-starter-openfeign`)
-  - **Justificación:** cliente declarativo — se define una sola interfaz Java y Spring genera la implementación HTTP automáticamente. Reduce código, mejora legibilidad y se integra nativamente con Spring Boot.
-- **Manejo de errores:** `@RestControllerAdvice` + excepciones personalizadas (`RecursoNoEncontradoException`, `ServicioNoDisponibleException`)
-- **Logs:** SLF4J (`LoggerFactory`) en cada llamada externa — antes, después y en caso de fallo
-- **Timeouts:** `connectTimeout=3000ms`, `readTimeout=5000ms` vía `spring.cloud.openfeign.client.config.default`
-- **Pruebas de integración:** colección Postman en `/postman/hito2-integracion.json`
-
-### Escenario de despliegue
-
-- [x] **Escenario A — Todos los servicios en una sola instancia EC2**
-  - **Instancia:** AWS EC2 t3.large (Ubuntu 24.04)
-  - **IP pública:** `3.91.218.133`
-  - **Repositorio:** https://github.com/Maxijrrr/biblioteca-microservicios
-  - Los contenedores se comunican por nombre Docker interno (red `red_interna_proyecto`)
-  - Las URLs de Feign usan `http://ms-<servicio>:<puerto>` — resolución interna Docker DNS
+Docker Compose define 20 contenedores en total: 10 aplicaciones Spring Boot y 10 bases de datos MySQL independientes. Todos se conectan a la red interna `red_interna_proyecto`.
 
 ---
 
-## 🚀 Despliegue Técnico
+## Comunicacion Entre Microservicios
 
-### Prerrequisitos
-- Docker Desktop con al menos 8 GB RAM asignados
-- Git
+### Flujos implementados con OpenFeign
 
-### Levantar el sistema completo
+```mermaid
+graph TD
+    Prestamos["ms-prestamos :8087"]
+    Perfiles["ms-perfiles :8086"]
+    Inventario["ms-inventario :8084"]
+    Devoluciones["ms-devoluciones :8082"]
+
+    Prestamos -->|"GET /api/perfiles/{id}"| Perfiles
+    Prestamos -->|"GET /api/inventario/isbn/{isbn}"| Inventario
+    Devoluciones -->|"GET /api/prestamos/{id}"| Prestamos
+```
+
+### Tabla de contratos
+
+| Origen | Destino | Metodo | Endpoint | DTO esperado | Justificacion |
+|:--|:--|:--:|:--|:--|:--|
+| ms-prestamos | ms-perfiles | GET | `/api/perfiles/{id}` | `PerfilDTO` | Validar que el perfil exista antes de crear un prestamo. |
+| ms-prestamos | ms-inventario | GET | `/api/inventario/isbn/{isbn}` | Lista de stock inventario | Validar stock disponible antes de crear un prestamo. |
+| ms-devoluciones | ms-prestamos | GET | `/api/prestamos/{id}` | `PrestamoDTO` | Confirmar que el prestamo exista y este `ACTIVO` antes de registrar la devolucion. |
+
+### Configuracion tecnica
+
+| Elemento | Implementacion |
+|:--|:--|
+| Cliente REST | OpenFeign (`spring-cloud-starter-openfeign`) |
+| Descubrimiento en Docker | URLs por nombre de contenedor: `http://ms-servicio:puerto` |
+| Timeouts Feign | `connectTimeout=3000ms`, `readTimeout=5000ms` |
+| Errores controlados | `@RestControllerAdvice` y excepciones personalizadas |
+| Logs | SLF4J en llamadas externas, validaciones y fallos |
+| Arranque DB | `healthcheck`, `depends_on: condition: service_healthy` y tolerancia Hikari |
+
+---
+
+## Endpoints Principales Para Hito 2
+
+### Crear perfil
+
+```bash
+curl -X POST http://localhost:8086/api/perfil \
+  -H "Content-Type: application/json" \
+  -d '{"rut":"12345678-9","nombre":"Juan Perez","correo":"juan@duoc.cl","carrera":"Informatica"}'
+```
+
+### Crear stock
+
+```bash
+curl -X POST http://localhost:8084/api/inventario \
+  -H "Content-Type: application/json" \
+  -d '{"isbn":"978-3-16","idSucursal":1,"stockTotal":5,"stockDisponible":5}'
+```
+
+### Crear prestamo E2E
+
+```bash
+curl -X POST http://localhost:8087/api/prestamos/solicitar \
+  -H "Content-Type: application/json" \
+  -d '{"idPerfil":1,"isbn":"978-3-16"}'
+```
+
+Resultado esperado: `ms-prestamos` consulta a `ms-perfiles` y `ms-inventario`; si ambas validaciones son correctas, crea un prestamo con estado `ACTIVO`.
+
+### Crear devolucion E2E
+
+```bash
+curl -X POST http://localhost:8082/api/devoluciones \
+  -H "Content-Type: application/json" \
+  -d '{"idPrestamo":1}'
+```
+
+Resultado esperado: `ms-devoluciones` consulta a `ms-prestamos`; si el prestamo existe y esta `ACTIVO`, registra la devolucion.
+
+---
+
+## Pruebas Empiricas Realizadas
+
+Por limitacion de recursos locales, las pruebas se ejecutaron de forma incremental: se levantaron solo los microservicios necesarios para cada escenario y luego se apagaron antes de continuar. Esta estrategia evita sobrecargar el equipo y mantiene las pruebas controladas.
+
+| Area | Estado | Evidencia |
+|:--|:--:|:--|
+| ms-ebooks + db-ebooks | Probado | Crear, listar, buscar, prestar, devolver y eliminar ebook. |
+| ms-catalogo + db-catalogo | Probado | CRUD completo y correccion de tolerancia de arranque DB. |
+| ms-inventario + db-inventario | Probado | Crear stock, buscar por ISBN/sucursal, actualizar, eliminar y 404 esperado. |
+| ms-sucursales + db-sucursales | Probado | CRUD completo y 404 esperado. |
+| ms-penalizaciones + db-penalizaciones | Probado | Crear, buscar por perfil/estado, actualizar, eliminar y 404 esperado. |
+| ms-autenticador + db-autenticador | Probado | Registrar, login, consultar perfil, cambiar password y login nuevo. |
+| ms-reservas + db-reservas | Probado | Crear, listar, actualizar, eliminar y 404 esperado. |
+| Flujo prestamos | Probado | `ms-prestamos -> ms-perfiles` y `ms-prestamos -> ms-inventario`. |
+| Flujo devoluciones | Probado | `ms-devoluciones -> ms-prestamos`. |
+| Resiliencia inventario caido | Probado | `ms-prestamos` responde HTTP 503 controlado. |
+| Resiliencia prestamos caido | Probado | `ms-devoluciones` responde HTTP 503 controlado. |
+
+Logs observados durante el flujo de prestamos:
+
+```text
+Consultando ms-perfiles...
+Perfil validado correctamente
+Consultando ms-inventario...
+Stock validado correctamente
+Prestamo guardado exitosamente
+```
+
+Logs observados durante el flujo de devoluciones:
+
+```text
+Consultando ms-prestamos para validar prestamo
+Prestamo validado correctamente
+```
+
+---
+
+## Ejecucion Local Segura
+
+Para equipos con recursos limitados, no es obligatorio levantar todo el sistema al mismo tiempo. Se recomienda probar por subconjuntos:
+
+```bash
+# Ejemplo: probar prestamos con sus dependencias
+docker compose up -d --build db-perfiles db-inventario db-prestamos ms-perfiles ms-inventario ms-prestamos
+
+# Ver estado
+docker ps
+
+# Apagar el subconjunto probado
+docker compose stop ms-prestamos ms-inventario ms-perfiles db-prestamos db-inventario db-perfiles
+```
+
+Para levantar todo el sistema en una maquina con recursos suficientes:
+
+```bash
+docker compose up -d --build
+```
+
+Para apagar todo:
+
+```bash
+docker compose down
+```
+
+---
+
+## Despliegue En AWS EC2
+
+El proyecto esta documentado para el Escenario A: todos los servicios en una sola instancia EC2 usando Docker Compose.
+
+Recomendacion minima:
+
+- Ubuntu 24.04
+- Docker y Docker Compose instalados
+- Instancia con memoria suficiente para 20 contenedores
+- Puertos abiertos segun necesidad de evaluacion: 8080 a 8089
+
+Comandos base:
 
 ```bash
 git clone https://github.com/Maxijrrr/biblioteca-microservicios
 cd biblioteca-microservicios
 docker compose up -d --build
-```
-
-Docker espera a que cada MySQL esté 100% listo (`healthcheck`) antes de iniciar el microservicio correspondiente, eliminando errores de Race Condition en el arranque.
-
-### Verificar estado del sistema
-
-```bash
-# Ver los 20 contenedores corriendo (10 MySQL + 10 Spring Boot)
 docker ps
-
-# Ver logs de un microservicio específico
-docker logs ms-prestamos
-
-# Ver solo los logs de comunicación entre servicios
-docker logs ms-prestamos | grep "ms-perfiles\|ms-inventario"
 ```
+
+Si la instancia EC2 es pequena, aplicar la misma estrategia local: levantar solo los subconjuntos requeridos para cada flujo y apagarlos al terminar.
 
 ---
 
-## 🧪 Pruebas de Integración (Hito 2)
+## Estructura Del Proyecto
 
-### Importar colección Postman
-1. Abrir Postman
-2. `File → Import → postman/hito2-integracion.json`
-3. Ejecutar los flujos en orden
-
-### Pruebas manuales desde EC2
-
-**Paso 1 — Crear perfil de alumno:**
-```bash
-curl -X POST http://localhost:8086/api/perfil \
--H "Content-Type: application/json" \
--d '{"rut":"12345678-9","nombre":"Juan Perez","correo":"juan@duoc.cl","carrera":"Informatica"}'
-```
-> Respuesta esperada: `{"success":true,"message":"Perfil creado exitosamente","data":{...},"status":201}`
-
-**Paso 2 — Crear stock en inventario:**
-```bash
-curl -X POST http://localhost:8084/api/inventario \
--H "Content-Type: application/json" \
--d '{"isbn":"978-3-16","idSucursal":1,"stockTotal":5,"stockDisponible":5}'
-```
-> Respuesta esperada: `{"idInventario":1,"isbn":"978-3-16","idSucursal":1,"stockTotal":5,"stockDisponible":5}`
-
-**Paso 3 — Crear préstamo (Prueba de Fuego Feign E2E):**
-```bash
-curl -X POST http://localhost:8087/api/prestamos \
--H "Content-Type: application/json" \
--d '{"idPerfil":1,"isbn":"978-3-16"}'
-```
-> ✅ `ms-prestamos` consulta internamente a `ms-perfiles` (valida alumno) y a `ms-inventario` (valida stock). Si ambos confirman, crea el préstamo con estado `ACTIVO`.
-
-**Paso 4 — Prueba de resiliencia (servicio caído):**
-```bash
-# Apagar ms-perfiles
-docker stop ms-perfiles
-
-# Intentar crear préstamo — el sistema NO debe caer con Error 500
-curl -X POST http://localhost:8087/api/prestamos \
--H "Content-Type: application/json" \
--d '{"idPerfil":1,"isbn":"978-3-16"}'
-```
-> ✅ Respuesta controlada: `{"error":"Servicio de perfiles no disponible en este momento"}` HTTP 503
-
-**Paso 5 — Recuperar ms-perfiles:**
-```bash
-docker start ms-perfiles
-```
-
----
-
-## 🗂️ Estructura del Proyecto
-
-```
+```text
 biblioteca-microservicios/
-├── docker-compose.yml              ← Orquestación: 10 servicios + 10 BDs con healthcheck
-├── postman/
-│   └── hito2-integracion.json     ← Colección de pruebas E2E
-├── README.md
-└── codigo-fuente/
-    ├── ms-autenticador/
-    │   ├── Dockerfile              ← Build 2 etapas: Maven (compilar) + JRE (ejecutar)
-    │   ├── pom.xml
-    │   └── src/main/java/cl/duoc/ms_autenticador/
-    │       ├── controller/         ← REST endpoints con ResponseEntity<DTO>
-    │       ├── service/            ← Lógica de negocio + logs SLF4J
-    │       ├── repository/         ← JpaRepository (solo accede a SU BD)
-    │       ├── model/              ← Entidades JPA @Entity (NO se exponen)
-    │       ├── dto/                ← DTOs de entrada y salida
-    │       └── exception/          ← GlobalExceptionHandler + custom exceptions
-    ├── ms-catalogo/        ← mismo patrón
-    ├── ms-devoluciones/    ← mismo patrón + FeignClient → ms-prestamos
-    ├── ms-ebooks/          ← mismo patrón
-    ├── ms-inventario/      ← mismo patrón
-    ├── ms-penalizaciones/  ← mismo patrón
-    ├── ms-perfiles/        ← mismo patrón
-    ├── ms-prestamos/       ← mismo patrón + FeignClient → ms-perfiles, ms-inventario
-    ├── ms-reservas/        ← mismo patrón
-    └── ms-sucursales/      ← mismo patrón
+|-- docker-compose.yml
+|-- README.md
+|-- postman/
+|   `-- hito2-integracion.json
+`-- codigo-fuente/
+    |-- ms-autenticador/
+    |-- ms-catalogo/
+    |-- ms-devoluciones/
+    |-- ms-ebooks/
+    |-- ms-inventario/
+    |-- ms-penalizaciones/
+    |-- ms-perfiles/
+    |-- ms-prestamos/
+    |-- ms-reservas/
+    `-- ms-sucursales/
+```
+
+Cada microservicio mantiene la estructura esperada:
+
+```text
+controller/
+service/
+repository/
+model/
+dto/
+exception/
+src/main/resources/application.properties
+Dockerfile
+pom.xml
 ```
 
 ---
 
-## ✅ Lista de Cotejo Final — Hito 2
+## Checklist Hito 2
 
-### Fase 1 — Diseño de dependencias
-- [x] Diagrama de dependencias publicado en README (10 servicios)
-- [x] Tabla de contratos con Origen, Destino, Método, Endpoint y DTO
-
-### Fase 2 — DTOs
-- [x] Cada microservicio tiene paquete `dto/` con DTOs de entrada y salida
-- [x] Los controllers devuelven `ResponseEntity<DTO>` — nunca entidades JPA
-
-### Fase 3 — Feign Client
-- [x] `ms-prestamos`: `@EnableFeignClients` + `PerfilClient` + `InventarioClient`
-- [x] `ms-devoluciones`: `@EnableFeignClients` + `PrestamoClient`
-- [x] URLs en `application.properties` con variables de entorno `${VARIABLE:default}`
-- [x] URLs inyectadas desde `docker-compose.yml` para no hardcodear
-
-### Fase 4 — Timeouts, errores y logs
-- [x] `connectTimeout=3000ms`, `readTimeout=5000ms` en servicios con Feign
-- [x] `FeignException.NotFound` → HTTP 404 controlado
-- [x] `FeignException` genérica → HTTP 503 controlado
-- [x] `@RestControllerAdvice` en los **10 microservicios** (maneja 404, 503 y 400)
-- [x] `MethodArgumentNotValidException` → HTTP 400 con detalle de campos
-- [x] Logs SLF4J en cada llamada externa (antes, después y al fallar)
-
-### Fase 5 — Pruebas Postman
-- [x] Colección `postman/hito2-integracion.json` en el repositorio
-- [x] Flujo éxito E2E documentado
-- [x] Flujo resiliencia (servicio caído) documentado
-
-### Infraestructura Docker
-- [x] 10 Dockerfiles de 2 etapas (Maven build + JRE runtime ligero)
-- [x] 10 BDs MySQL con `healthcheck` configurado
-- [x] 10 microservicios con `depends_on: condition: service_healthy`
-- [x] Variables de entorno inyectadas desde `docker-compose.yml`
-- [x] Red única `red_interna_proyecto` tipo bridge para comunicación interna
-- [x] Volúmenes de persistencia nombrados para cada BD
+| Item | Estado |
+|:--|:--:|
+| 10 microservicios Spring Boot definidos | Cumplido |
+| 10 bases de datos MySQL independientes | Cumplido |
+| Patron Database per Service | Cumplido |
+| Docker Compose con red interna unica | Cumplido |
+| Healthchecks para MySQL | Cumplido |
+| `depends_on` condicionado por salud de DB | Cumplido |
+| DTOs de entrada/salida en los servicios | Cumplido |
+| Feign Client en ms-prestamos | Cumplido |
+| Feign Client en ms-devoluciones | Cumplido |
+| Dos flujos E2E interconectados | Cumplido y probado |
+| Timeouts Feign 3000ms/5000ms | Cumplido |
+| Manejo global de excepciones | Cumplido |
+| Respuestas 404/400/503 controladas | Cumplido |
+| Logs SLF4J en llamadas externas | Cumplido |
+| README tecnico actualizado | Cumplido |
+| Coleccion Postman incluida | Cumplido |
+| Pruebas empiricas por subconjuntos | Cumplido |
+| Preparado para GitHub y EC2 | Cumplido |
 
 ---
 
-## 🛠️ Comandos útiles en EC2
+## Coleccion Postman
 
-```bash
-# Levantar sistema completo
-docker compose up -d --build
+La coleccion de pruebas se encuentra en:
 
-# Ver estado de todos los contenedores
-docker ps
-
-# Ver logs en tiempo real de un servicio
-docker logs -f ms-prestamos
-
-# Detener todo el sistema
-docker compose down
-
-# Reiniciar un solo servicio
-docker compose restart ms-prestamos
-
-# Ver red interna Docker
-docker network inspect biblioteca-microservicios_red_interna_proyecto
+```text
+postman/hito2-integracion.json
 ```
 
+Incluye endpoints para CRUD y pruebas E2E de comunicacion entre servicios.
+
 ---
 
-*Desarrollo FullStack 1 — DSY1103 · Duoc UC 2026 · Profesor Michael Catalán*
+## Notas De Ingenieria
+
+- El sistema evita compartir bases de datos entre microservicios.
+- Los servicios se comunican por APIs internas, no por tablas externas.
+- Las URLs externas se inyectan con variables de entorno desde Docker Compose.
+- Se agrego tolerancia de conexion Hikari para evitar fallos por arranque lento de MySQL.
+- Las pruebas locales se realizaron por subconjuntos para proteger recursos del equipo.
+- En EC2 se puede repetir la misma estrategia o levantar todo si la instancia tiene memoria suficiente.
+
+---
+
+Desarrollo FullStack 1 - DSY1103 - Duoc UC 2026

@@ -2,6 +2,7 @@
 
 import cl.duoc.ms_perfiles.MsPerfilesApplication;
 import javax.naming.NameNotFoundException;
+import java.util.List;
 
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,21 @@ public class PerfilService {
         return new PerfilResponseDTO(perfil.getIdPerfil(),perfil.getRut(),perfil.getNombre()
     ,perfil.getCorreo(),perfil.getCarrera());
     }
+
+    public PerfilResponseDTO buscarPerfilPorId(Long id) {
+        PerfilEntity perfil = perfilRepository.findById(id)
+        .orElseThrow(()-> new NotFoundException("Perfil no encontrado"));
+        return new PerfilResponseDTO(perfil.getIdPerfil(),perfil.getRut(),perfil.getNombre()
+    ,perfil.getCorreo(),perfil.getCarrera());
+    }
+
+    public List<PerfilResponseDTO> listarTodos() {
+        return perfilRepository.findAll().stream()
+        .map(perfil -> new PerfilResponseDTO(perfil.getIdPerfil(), perfil.getRut(), perfil.getNombre(),
+                perfil.getCorreo(), perfil.getCarrera()))
+        .toList();
+    }
+
     public void eliminarPerfilPorRut (String rut){
         PerfilEntity perfil = perfilRepository.findByRut(rut)
         .orElseThrow(()-> new NotFoundException("Rut no existe"));

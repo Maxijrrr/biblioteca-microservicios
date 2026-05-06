@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import java.util.List;
 
 
 @RestController
@@ -25,6 +26,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequiredArgsConstructor
 public class PerfilController {
     private final PerfilService perfilService;
+
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<PerfilResponseDTO>>> listarTodos() {
+        ApiResponse<List<PerfilResponseDTO>> response = new ApiResponse<>(
+                true,
+                "Perfiles obtenidos exitosamente",
+                perfilService.listarTodos(),
+                HttpStatus.OK.value()
+        );
+        return ResponseEntity.ok(response);
+    }
 
     @PostMapping
     public ResponseEntity <ApiResponse<PerfilResponseDTO>> CrearPerfil (

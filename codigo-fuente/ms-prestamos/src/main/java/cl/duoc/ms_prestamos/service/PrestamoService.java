@@ -2,6 +2,7 @@ package cl.duoc.ms_prestamos.service;
 
 import cl.duoc.ms_prestamos.model.Prestamo;
 import cl.duoc.ms_prestamos.dto.PrestamoDTO;
+import cl.duoc.ms_prestamos.dto.PrestamoResponseDTO;
 import cl.duoc.ms_prestamos.repository.PrestamoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class PrestamoService {
     @Autowired
     private InventarioClient inventarioClient;
 
-    public Prestamo crearPrestamo(PrestamoDTO dto) {
+    public PrestamoResponseDTO crearPrestamo(PrestamoDTO dto) {
         log.info("Iniciando creacion de prestamo para perfil ID={} y libro ISBN={}", dto.getIdPerfil(), dto.getIsbn());
         
         // 1. Validar Perfil
@@ -77,10 +78,10 @@ public class PrestamoService {
         
         Prestamo guardado = repository.save(p);
         log.info("Prestamo guardado exitosamente con ID={}", guardado.getId());
-        return guardado;
+        return toResponseDTO(guardado);
     }
 
-    public Prestamo renovarPrestamo(Long id) {
+    public PrestamoResponseDTO renovarPrestamo(Long id) {
         Prestamo p = repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Préstamo no encontrado"));
         
@@ -89,21 +90,43 @@ public class PrestamoService {
         }
         
         p.setFechaDevolucionEsperada(p.getFechaDevolucionEsperada().plusDays(7));
-        return repository.save(p);
+        return toResponseDTO(repository.save(p));
     }
 
-    public Prestamo finalizarPrestamo(Long id) {
+    public PrestamoResponseDTO finalizarPrestamo(Long id) {
         Prestamo p = repository.findById(id)
             .orElseThrow(() -> new RuntimeException("Préstamo no encontrado"));
         p.setEstado("DEVUELTO");
-        return repository.save(p);
+        return toResponseDTO(repository.save(p));
     }
 
-    public List<Prestamo> obtenerVencidos() {
-        return repository.findByEstadoAndFechaDevolucionEsperadaBefore("ACTIVO", LocalDateTime.now());
+    public PrestamoResponseDTO obtenerPorId(Long id) {
+        Prestamo prestamo = repository.findById(id)
+            .orElseThrow(() -> new RecursoNoEncontradoException("Prestamo no encontrado"));
+        return toResponseDTO(prestamo);
     }
 
-    public List<Prestamo> listarPorAlumno(Long idPerfil) {
-        return repository.findByIdPerfil(idPerfil);
+    public List<PrestamoResponseDTO> listarTodos() {
+        return repository.findAll().stream().map(this::toResponseDTO).toList();
+    }
+
+    public List<PrestamoResponseDTO> obtenerVencidos() {
+        return repository.findByEstadoAndFechaDevolucionEsperadaBefore("ACTIVO", LocalDateTime.now())
+            .stream().map(this::toResponseDTO).toList();
+    }
+
+    public List<PrestamoResponseDTO> listarPorAlumno(Long idPerfil) {
+        return repository.findByIdPerfil(idPerfil).stream().map(this::toResponseDTO).toList();
+    }
+
+    private PrestamoResponseDTO toResponseDTO(Prestamo prestamo) {
+        PrestamoResponseDTO dto = new PrestamoResponseDTO();
+        dto.setIdPrestamo(prestamo.getId());
+        dto.setIdPerfil(prestamo.getIdPerfil());
+        dto.setIsbn(prestamo.getIsbn());
+        dto.setFechaPrestamo(prestamo.getFechaPrestamo());
+        dto.setFechaDevolucionEsperada(prestamo.getFechaDevolucionEsperada());
+        dto.setEstado(prestamo.getEstado());
+        return dto;
     }
 }

@@ -1,6 +1,7 @@
 package cl.duoc.ms_ebooks.service;
 
 import cl.duoc.ms_ebooks.model.Ebook;
+import cl.duoc.ms_ebooks.dto.EbookResponseDTO;
 import cl.duoc.ms_ebooks.repository.EbookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,15 +13,19 @@ public class EbookService {
     @Autowired
     private EbookRepository repository;
 
-    public List<Ebook> listarActivos() {
-        return repository.findByActivoTrue();
+    public List<EbookResponseDTO> listarActivos() {
+        return repository.findByActivoTrue().stream().map(this::toResponseDTO).toList();
     }
 
-    public List<Ebook> buscarPorAutor(String autor) {
-        return repository.findByAutorContainingIgnoreCaseAndActivoTrue(autor);
+    public List<EbookResponseDTO> buscarPorAutor(String autor) {
+        return repository.findByAutorContainingIgnoreCaseAndActivoTrue(autor).stream().map(this::toResponseDTO).toList();
     }
 
-    public Ebook guardar(Ebook ebook) {
+    public EbookResponseDTO guardar(Ebook ebook) {
+        return toResponseDTO(repository.save(ebook));
+    }
+
+    public Ebook guardarEntidad(Ebook ebook) {
         return repository.save(ebook);
     }
 
@@ -33,5 +38,17 @@ public class EbookService {
             ebook.setActivo(false);
             repository.save(ebook);
         });
+    }
+
+    private EbookResponseDTO toResponseDTO(Ebook ebook) {
+        EbookResponseDTO dto = new EbookResponseDTO();
+        dto.setId(ebook.getId());
+        dto.setTitulo(ebook.getTitulo());
+        dto.setAutor(ebook.getAutor());
+        dto.setIsbn(ebook.getIsbn());
+        dto.setCategoria(ebook.getCategoria());
+        dto.setDisponible(ebook.isDisponible());
+        dto.setActivo(ebook.isActivo());
+        return dto;
     }
 }
