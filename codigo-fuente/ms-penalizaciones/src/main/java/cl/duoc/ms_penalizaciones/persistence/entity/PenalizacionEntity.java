@@ -1,14 +1,23 @@
-package cl.duoc.ms_penalizaciones.model;
+package cl.duoc.ms_penalizaciones.persistence.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-import java.time.LocalDate;
 
 @Entity
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
+@Builder
 @Table(name = "penalizaciones")
-@Data
-public class Penalizacion {
+
+public class PenalizacionEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_penalizacion")
@@ -24,8 +33,6 @@ public class Penalizacion {
     private Double monto;
 
     @Column(name = "estado", nullable = false)
-    private String estado; // Pendiente, Pagada
+    private boolean estado;
 
-    @Column(name = "fecha_creacion", nullable = false)
-    private LocalDate fechaCreacion;
 }
