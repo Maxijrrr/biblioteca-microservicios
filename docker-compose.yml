@@ -25,7 +25,8 @@ services:
   db-autenticador:
     image: mysql:8.0
     container_name: mysql_autenticador
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_autenticador
@@ -44,7 +45,8 @@ services:
   db-catalogo:
     image: mysql:8.0
     container_name: mysql_catalogo
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_catalogo
@@ -63,7 +65,8 @@ services:
   db-devoluciones:
     image: mysql:8.0
     container_name: mysql_devoluciones
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_devoluciones
@@ -82,7 +85,8 @@ services:
   db-ebooks:
     image: mysql:8.0
     container_name: mysql_ebooks
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_ebooks
@@ -101,7 +105,8 @@ services:
   db-inventario:
     image: mysql:8.0
     container_name: mysql_inventario
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_inventario
@@ -120,7 +125,8 @@ services:
   db-penalizaciones:
     image: mysql:8.0
     container_name: mysql_penalizaciones
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_penalizaciones
@@ -139,7 +145,8 @@ services:
   db-perfiles:
     image: mysql:8.0
     container_name: mysql_perfiles
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_perfiles
@@ -158,7 +165,8 @@ services:
   db-prestamos:
     image: mysql:8.0
     container_name: mysql_prestamos
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_prestamos
@@ -177,7 +185,8 @@ services:
   db-reservas:
     image: mysql:8.0
     container_name: mysql_reservas
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_reservas
@@ -196,7 +205,8 @@ services:
   db-sucursales:
     image: mysql:8.0
     container_name: mysql_sucursales
-    restart: always
+    restart: unless-stopped
+    command: --performance-schema=OFF --innodb-buffer-pool-size=64M --max-connections=30
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: db_sucursales
@@ -225,6 +235,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-autenticador:3306/db_autenticador?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-autenticador:
         condition: service_healthy
@@ -240,6 +251,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-catalogo:3306/db_catalogo?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-catalogo:
         condition: service_healthy
@@ -255,6 +267,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-devoluciones:3306/db_devoluciones?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
       - PRESTAMOS_URL=http://ms-prestamos:8087
     depends_on:
       db-devoluciones:
@@ -273,6 +286,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-ebooks:3306/db_ebooks?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-ebooks:
         condition: service_healthy
@@ -288,6 +302,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-inventario:3306/db_inventario?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-inventario:
         condition: service_healthy
@@ -303,6 +318,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-penalizaciones:3306/db_penalizaciones?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-penalizaciones:
         condition: service_healthy
@@ -318,6 +334,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-perfiles:3306/db_perfiles?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-perfiles:
         condition: service_healthy
@@ -333,6 +350,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-prestamos:3306/db_prestamos?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
       - PERFILES_URL=http://ms-perfiles:8086
       - INVENTARIO_URL=http://ms-inventario:8084
     depends_on:
@@ -354,6 +372,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-reservas:3306/db_reservas?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-reservas:
         condition: service_healthy
@@ -369,6 +388,7 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:mysql://db-sucursales:3306/db_sucursales?useSSL=false&allowPublicKeyRetrieval=true
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
     depends_on:
       db-sucursales:
         condition: service_healthy
