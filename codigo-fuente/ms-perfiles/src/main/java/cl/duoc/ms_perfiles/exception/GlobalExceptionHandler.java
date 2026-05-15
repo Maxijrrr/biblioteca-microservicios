@@ -22,6 +22,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(Map.of("error", e.getMessage()));
     }
 
+    @ExceptionHandler(BaseApiException.class)
+    public ResponseEntity<Map<String, String>> handleBaseApi(BaseApiException e) {
+        return ResponseEntity.status(e.getStatusCode()).body(Map.of("error", e.getMessage()));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> handleValidation(MethodArgumentNotValidException e) {
         Map<String, String> errores = new LinkedHashMap<>();

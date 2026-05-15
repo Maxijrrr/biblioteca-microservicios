@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,7 +72,19 @@ public class InventarioService {
                 entity.getStockDisponible()
         );
     }
- 
+
+    public List<InventarioResponseDTO> buscarPorIsbn(String isbn) {
+        return inventarioRepository.findByIsbn(isbn)
+                .stream()
+                .map(entity -> new InventarioResponseDTO(
+                        entity.getIdInventario(),
+                        entity.getIsbn(),
+                        entity.getIdSucursal(),
+                        entity.getStockTotal(),
+                        entity.getStockDisponible()
+                ))
+                .toList();
+    }
 
     
  

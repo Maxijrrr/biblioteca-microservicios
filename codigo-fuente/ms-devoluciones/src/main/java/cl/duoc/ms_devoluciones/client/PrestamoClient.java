@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
     url = "${prestamos.service.url}"
 )
 public interface PrestamoClient {
-    @GetMapping("/api/prestamos/{id}")
+    @GetMapping("/api/v1/prestamos/{id}")
     PrestamoDTO obtenerPrestamo(@PathVariable("id") Long id);
 }

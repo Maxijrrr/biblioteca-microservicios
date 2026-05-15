@@ -67,7 +67,7 @@ graph TD
 
     Prestamos -->|"GET /api/perfiles/{id}"| Perfiles
     Prestamos -->|"GET /api/inventario/isbn/{isbn}"| Inventario
-    Devoluciones -->|"GET /api/prestamos/{id}"| Prestamos
+    Devoluciones -->|"GET /api/v1/prestamos/{id}"| Prestamos
 ```
 
 ### Tabla de contratos
@@ -76,7 +76,7 @@ graph TD
 |:--|:--|:--:|:--|:--|:--|
 | ms-prestamos | ms-perfiles | GET | `/api/perfiles/{id}` | `PerfilDTO` | Validar que el perfil exista antes de crear un prestamo. |
 | ms-prestamos | ms-inventario | GET | `/api/inventario/isbn/{isbn}` | Lista de stock inventario | Validar stock disponible antes de crear un prestamo. |
-| ms-devoluciones | ms-prestamos | GET | `/api/prestamos/{id}` | `PrestamoDTO` | Confirmar que el prestamo exista y este `ACTIVO` antes de registrar la devolucion. |
+| ms-devoluciones | ms-prestamos | GET | `/api/v1/prestamos/{id}` | `PrestamoDTO` | Confirmar que el prestamo exista y este `ACTIVO` antes de registrar la devolucion. |
 
 ### Configuracion tecnica
 
@@ -112,7 +112,7 @@ curl -X POST http://localhost:8084/api/inventario \
 ### Crear prestamo E2E
 
 ```bash
-curl -X POST http://localhost:8087/api/prestamos/solicitar \
+curl -X POST http://localhost:8087/api/v1/prestamos \
   -H "Content-Type: application/json" \
   -d '{"idPerfil":1,"isbn":"978-3-16"}'
 ```

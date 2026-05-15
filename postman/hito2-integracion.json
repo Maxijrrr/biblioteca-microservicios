@@ -8,7 +8,7 @@
   "variable": [
     {
       "key": "base_url",
-      "value": "http://3.91.218.133",
+      "value": "http://44.211.201.7",
       "type": "string",
       "description": "IP publica de la instancia AWS EC2"
     }
@@ -272,10 +272,10 @@
               "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos/solicitar",
+              "raw": "{{base_url}}:8087/api/v1/prestamos",
               "host": ["{{base_url}}"],
               "port": "8087",
-              "path": ["api", "prestamos", "solicitar"]
+              "path": ["api", "v1", "prestamos"]
             },
             "description": "PRUEBA DE FUEGO FEIGN: ms-prestamos consulta internamente a ms-perfiles (GET /api/perfiles/{id}) y ms-inventario (GET /api/inventario/isbn/{isbn}). Demuestra comunicación entre 3 microservicios via Feign Client."
           }
@@ -290,10 +290,10 @@
               "raw": "{\n  \"idPerfil\": 99999,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos/solicitar",
+              "raw": "{{base_url}}:8087/api/v1/prestamos",
               "host": ["{{base_url}}"],
               "port": "8087",
-              "path": ["api", "prestamos", "solicitar"]
+              "path": ["api", "v1", "prestamos"]
             },
             "description": "ms-prestamos llama a ms-perfiles con ID inexistente. Debe retornar HTTP 404 con {\"error\":\"Perfil no encontrado para el prestamo\"}."
           }
@@ -308,10 +308,10 @@
               "raw": "{\n  \"idPerfil\": 1,\n  \"isbn\": \"978-3-16-148410-0\"\n}"
             },
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos/solicitar",
+              "raw": "{{base_url}}:8087/api/v1/prestamos",
               "host": ["{{base_url}}"],
               "port": "8087",
-              "path": ["api", "prestamos", "solicitar"]
+              "path": ["api", "v1", "prestamos"]
             },
             "description": "PRECONDICION: Ejecutar 'docker stop ms-perfiles' antes de lanzar esta request. Debe retornar HTTP 503 con {\"error\":\"Servicio de perfiles no disponible en este momento\"}. Demuestra resiliencia del sistema."
           }
@@ -322,7 +322,7 @@
             "method": "GET",
             "header": [],
             "url": {
-              "raw": "{{base_url}}:8087/api/prestamos",
+              "raw": "{{base_url}}:8087/api/v1/prestamos",
               "host": ["{{base_url}}"],
               "port": "8087",
               "path": ["api", "prestamos"]
