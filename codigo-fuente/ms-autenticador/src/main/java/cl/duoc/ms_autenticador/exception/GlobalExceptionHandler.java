@@ -29,4 +29,22 @@ public class GlobalExceptionHandler {
                 .forEach(err -> errores.put(err.getField(), err.getDefaultMessage()));
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errores);
     }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<Map<String, String>> handleRuntime(RuntimeException e) {
+        String message = e.getMessage() != null ? e.getMessage() : "Error de autenticacion";
+
+        String normalizedMessage = message.toLowerCase();
+
+        if (normalizedMessage.contains("usuario o") && normalizedMessage.contains("incorrect")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", message));
+        }
+
+        if (normalizedMessage.contains("no encontrado")) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", message));
+        }
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", message));
+    }
 }
+
