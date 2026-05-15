@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/v1/auth")
 public class AuthController {
 
     @Autowired
@@ -44,7 +44,7 @@ public class AuthController {
         dto.setRol(usuario.getRol());
         return dto;
     }
-    @GetMapping("/perfil/{username}")
+    @GetMapping("/users/{username}")
     public ResponseEntity<?> verPerfil(@PathVariable String username) {
         // Buscamos el perfil en el service
         java.util.Optional<UsuarioDTO> perfilOpt = usuarioService.obtenerPerfil(username);
@@ -57,7 +57,7 @@ public class AuthController {
     }
 
     // Nuevo: Cambiar contraseña
-    @PatchMapping("/update-password")
+    @PatchMapping("/users/{username}/password")
     public ResponseEntity<String> cambiarPass(@RequestParam String username, @RequestParam String newPass) {
         try {
             usuarioService.actualizarPassword(username, newPass);

@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/prestamos")
+@RequestMapping("/api/v1/prestamos")
 public class PrestamoController {
 
     @Autowired
     private PrestamoService service;
 
-    @PostMapping("/solicitar")
+    @PostMapping
     public ResponseEntity<PrestamoResponseDTO> solicitar(@Valid @RequestBody PrestamoDTO dto) {
         return new ResponseEntity<>(service.crearPrestamo(dto), HttpStatus.CREATED);
     }

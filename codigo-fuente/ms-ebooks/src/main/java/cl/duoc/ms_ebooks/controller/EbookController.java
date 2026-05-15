@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/ebooks")
+@RequestMapping("/api/v1/ebooks")
 public class EbookController {
 
     @Autowired
