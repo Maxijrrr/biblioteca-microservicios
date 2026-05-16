@@ -351,8 +351,8 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=root
       - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
-      - PERFILES_URL=http://ms-perfiles:8086
-      - INVENTARIO_URL=http://ms-inventario:8084
+      - PERFILES_SERVICE_URL=http://ms-perfiles:8086
+      - INVENTARIO_SERVICE_URL=http://ms-inventario:8084
     depends_on:
       db-prestamos:
         condition: service_healthy

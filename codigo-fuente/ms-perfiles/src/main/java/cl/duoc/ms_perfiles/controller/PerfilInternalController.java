@@ -11,7 +11,7 @@ import cl.duoc.ms_perfiles.service.PerfilService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/perfiles")
+@RequestMapping("/api/v1/perfiles")
 @RequiredArgsConstructor
 public class PerfilInternalController {
 

@@ -22,7 +22,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/api/perfil")
+@RequestMapping("/api/v1/perfiles")
 @RequiredArgsConstructor
 public class PerfilController {
     private final PerfilService perfilService;
