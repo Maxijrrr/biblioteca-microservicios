@@ -1,4 +1,4 @@
-package cl.duoc.ms_penalizaciones.persistence.entity;
+package cl.duoc.ms_penalizaciones.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
