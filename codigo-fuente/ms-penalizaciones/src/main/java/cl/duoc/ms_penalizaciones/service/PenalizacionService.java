@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import cl.duoc.ms_penalizaciones.dto.CreatePenalizacionDTO;
 import cl.duoc.ms_penalizaciones.dto.PenalizacionResponseDTO;
 import cl.duoc.ms_penalizaciones.exception.NotFoundException;
-import cl.duoc.ms_penalizaciones.persistence.entity.PenalizacionEntity;
-import cl.duoc.ms_penalizaciones.persistence.repository.PenalizacionRepository;
+import cl.duoc.ms_penalizaciones.model.PenalizacionEntity;
+import cl.duoc.ms_penalizaciones.repository.PenalizacionRepository;
 @Service
 @RequiredArgsConstructor
 public class PenalizacionService {

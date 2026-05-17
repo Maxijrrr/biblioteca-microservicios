@@ -3,8 +3,8 @@ package cl.duoc.ms_inventario.service;
 import cl.duoc.ms_inventario.dto.InventarioDTO;
 import cl.duoc.ms_inventario.dto.InventarioResponseDTO;
 import cl.duoc.ms_inventario.exception.NotFoundException;
-import cl.duoc.ms_inventario.persistence.entity.InventarioEntity;
-import cl.duoc.ms_inventario.persistence.repository.InventarioRepository;
+import cl.duoc.ms_inventario.model.InventarioEntity;
+import cl.duoc.ms_inventario.repository.InventarioRepository;
 import lombok.RequiredArgsConstructor;
 
 

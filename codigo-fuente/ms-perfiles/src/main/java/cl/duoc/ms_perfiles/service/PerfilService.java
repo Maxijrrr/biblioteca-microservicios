@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import cl.duoc.ms_perfiles.dto.CreatePerfilDTO;
 import cl.duoc.ms_perfiles.dto.PerfilResponseDTO;
 import cl.duoc.ms_perfiles.exception.NotFoundException;
-import cl.duoc.ms_perfiles.persistence.entity.PerfilEntity;
-import cl.duoc.ms_perfiles.persistence.repository.PerfilRepository;
+import cl.duoc.ms_perfiles.model.PerfilEntity;
+import cl.duoc.ms_perfiles.repository.PerfilRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
