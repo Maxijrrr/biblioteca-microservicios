@@ -1,4 +1,4 @@
-package cl.duoc.ms_perfiles.persistence.entity;
+package cl.duoc.ms_perfiles.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -50,12 +50,12 @@ public class PerfilController {
         );
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
-    @GetMapping("/{rut}")
-    public ResponseEntity<ApiResponse<PerfilResponseDTO>> buscarPorRut(@PathVariable String rut) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<PerfilResponseDTO>> buscarPorId(@PathVariable Long id) {
         ApiResponse<PerfilResponseDTO> response = new ApiResponse<>(
                 true,
                 "Perfil obtenido exitosamente",
-                 perfilService.BuscarPerfilPorRut(rut),
+                 perfilService.buscarPerfilPorId(id),
                 HttpStatus.OK.value()
         );
         return ResponseEntity.ok(response);

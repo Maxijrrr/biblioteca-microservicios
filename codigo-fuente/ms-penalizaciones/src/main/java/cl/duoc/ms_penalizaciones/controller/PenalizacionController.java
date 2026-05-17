@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 @RestController
-@RequestMapping("/api/penalizaciones")
+@RequestMapping("/api/v1/penalizaciones")
 @RequiredArgsConstructor
 public class PenalizacionController {
 

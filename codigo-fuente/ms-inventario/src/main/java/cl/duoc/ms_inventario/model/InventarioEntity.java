@@ -1,4 +1,4 @@
-package cl.duoc.ms_inventario.persistence.entity;
+package cl.duoc.ms_inventario.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

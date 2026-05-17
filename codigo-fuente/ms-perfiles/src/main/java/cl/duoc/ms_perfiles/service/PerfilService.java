@@ -1,14 +1,12 @@
  package cl.duoc.ms_perfiles.service;
 
-import cl.duoc.ms_perfiles.MsPerfilesApplication;
-import javax.naming.NameNotFoundException;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import cl.duoc.ms_perfiles.dto.CreatePerfilDTO;
 import cl.duoc.ms_perfiles.dto.PerfilResponseDTO;
-import cl.duoc.ms_perfiles.exception.NotFoundException;
+import cl.duoc.ms_perfiles.exception.RecursoNoEncontradoException;
 import cl.duoc.ms_perfiles.model.PerfilEntity;
 import cl.duoc.ms_perfiles.repository.PerfilRepository;
 import jakarta.transaction.Transactional;
@@ -43,14 +41,14 @@ public class PerfilService {
     }
     public PerfilResponseDTO BuscarPerfilPorRut (String rut){
         PerfilEntity perfil = perfilRepository.findByRut(rut)
-        .orElseThrow(()-> new NotFoundException("Perfil no encontrado"));
+        .orElseThrow(()-> new RecursoNoEncontradoException("Perfil no encontrado"));
         return new PerfilResponseDTO(perfil.getIdPerfil(),perfil.getRut(),perfil.getNombre()
     ,perfil.getCorreo(),perfil.getCarrera());
     }
 
     public PerfilResponseDTO buscarPerfilPorId(Long id) {
         PerfilEntity perfil = perfilRepository.findById(id)
-        .orElseThrow(()-> new NotFoundException("Perfil no encontrado"));
+        .orElseThrow(()-> new RecursoNoEncontradoException("Perfil no encontrado"));
         return new PerfilResponseDTO(perfil.getIdPerfil(),perfil.getRut(),perfil.getNombre()
     ,perfil.getCorreo(),perfil.getCarrera());
     }
@@ -64,13 +62,13 @@ public class PerfilService {
 
     public void eliminarPerfilPorRut (String rut){
         PerfilEntity perfil = perfilRepository.findByRut(rut)
-        .orElseThrow(()-> new NotFoundException("Rut no existe"));
+        .orElseThrow(()-> new RecursoNoEncontradoException("Rut no existe"));
         perfilRepository.delete(perfil);
     }
     @Transactional
     public PerfilResponseDTO ActualizarPerfil (Long Id,CreatePerfilDTO actualizarDatos){
         PerfilEntity perfil = perfilRepository.findById(Id)
-        .orElseThrow(()-> new NotFoundException("Perfil no encontrado"));
+        .orElseThrow(()-> new RecursoNoEncontradoException("Perfil no encontrado"));
 
         perfil.setRut(actualizarDatos.rut());
         perfil.setNombre(actualizarDatos.nombre());

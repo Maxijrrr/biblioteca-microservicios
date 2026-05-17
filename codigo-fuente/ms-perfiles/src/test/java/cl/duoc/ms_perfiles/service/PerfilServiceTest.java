@@ -15,8 +15,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import cl.duoc.ms_perfiles.dto.PerfilResponseDTO;
 import cl.duoc.ms_perfiles.exception.NotFoundException;
-import cl.duoc.ms_perfiles.persistence.entity.PerfilEntity;
-import cl.duoc.ms_perfiles.persistence.repository.PerfilRepository;
+import cl.duoc.ms_perfiles.model.PerfilEntity;
+import cl.duoc.ms_perfiles.repository.PerfilRepository;
 
 @ExtendWith(MockitoExtension.class)
 class PerfilServiceTest {
