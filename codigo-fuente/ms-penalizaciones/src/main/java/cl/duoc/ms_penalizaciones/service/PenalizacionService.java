@@ -12,7 +12,6 @@ import cl.duoc.ms_penalizaciones.exception.RecursoNoEncontradoException;
 import cl.duoc.ms_penalizaciones.model.PenalizacionEntity;
 import cl.duoc.ms_penalizaciones.repository.PenalizacionRepository;
 import cl.duoc.ms_penalizaciones.dto.PerfilDTO;
-import cl.duoc.ms_penalizaciones.dto.PerfilResponse;
 import cl.duoc.ms_penalizaciones.client.PerfilClient;
 import cl.duoc.ms_penalizaciones.client.PrestamoClient;
 import cl.duoc.ms_penalizaciones.dto.PrestamoDTO;
@@ -91,10 +90,10 @@ public class PenalizacionService {
 
         private void validarPerfil(Long idPerfil) {
     try {
-        PerfilResponse perfil = perfilClient.buscarPorId(idPerfil);
+        PerfilDTO perfil = perfilClient.buscarPorId(idPerfil);
         System.out.println("Respuesta del servicio de perfiles: " + perfil);
 
-        if (perfil == null || perfil.data() == null) {
+        if (perfil == null ) {
             throw new RecursoNoEncontradoException("Perfil no encontrado con ID: " + idPerfil);
         }
 

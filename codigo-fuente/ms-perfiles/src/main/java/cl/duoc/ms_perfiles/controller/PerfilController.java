@@ -51,14 +51,9 @@ public class PerfilController {
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<PerfilResponseDTO>> buscarPorId(@PathVariable Long id) {
-        ApiResponse<PerfilResponseDTO> response = new ApiResponse<>(
-                true,
-                "Perfil obtenido exitosamente",
-                 perfilService.buscarPerfilPorId(id),
-                HttpStatus.OK.value()
-        );
-        return ResponseEntity.ok(response);
+    public ResponseEntity<PerfilResponseDTO> buscarPorId(@PathVariable Long id) {
+        PerfilResponseDTO perfil = perfilService.buscarPerfilPorId(id);
+        return ResponseEntity.ok(perfil);
     }
     @PutMapping("/{id}")
     public ResponseEntity<ApiResponse<PerfilResponseDTO>> actualizarPerfil(

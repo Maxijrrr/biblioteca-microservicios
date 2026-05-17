@@ -3,7 +3,7 @@ package cl.duoc.ms_penalizaciones.client;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import cl.duoc.ms_penalizaciones.dto.PerfilResponse;
+import cl.duoc.ms_penalizaciones.dto.PerfilDTO;
 
 @FeignClient(
     name = "perfiles-client",
@@ -11,6 +11,6 @@ import cl.duoc.ms_penalizaciones.dto.PerfilResponse;
 )
 public interface PerfilClient {
     @GetMapping("/api/v1/perfiles/{id}")
-    PerfilResponse buscarPorId(@PathVariable("id") Long id);
+    PerfilDTO buscarPorId(@PathVariable("id") Long id);
     
 }
