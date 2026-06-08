@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
     url = "${perfiles.service.url}"
 )
 public interface PerfilClient {
-    @GetMapping("/api/v1/perfiles/{id}")
+    @GetMapping("/api/perfiles/{id}")
     PerfilDTO obtenerPerfil(@PathVariable("id") Long id);
 }

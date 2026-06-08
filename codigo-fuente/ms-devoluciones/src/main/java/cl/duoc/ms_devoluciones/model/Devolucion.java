@@ -1,12 +1,16 @@
 package cl.duoc.ms_devoluciones.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "devoluciones")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Devolucion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

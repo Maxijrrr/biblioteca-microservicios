@@ -1,11 +1,15 @@
 package cl.duoc.ms_catalogo.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "libros")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Libro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

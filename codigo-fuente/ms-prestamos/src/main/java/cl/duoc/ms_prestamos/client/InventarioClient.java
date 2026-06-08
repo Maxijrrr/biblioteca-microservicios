@@ -12,6 +12,6 @@ import java.util.Map;
     url = "${inventario.service.url}"
 )
 public interface InventarioClient {
-    @GetMapping("/api/v1/inventario/isbn/{isbn}")
+    @GetMapping("/api/inventario/isbn/{isbn}")
     List<Map<String, Object>> buscarStockPorIsbn(@PathVariable("isbn") String isbn);
 }

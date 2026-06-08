@@ -1,11 +1,15 @@
 package cl.duoc.ms_reservas.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "reservas")
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Reserva {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

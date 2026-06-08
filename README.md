@@ -131,6 +131,59 @@ Resultado esperado: `ms-devoluciones` consulta a `ms-prestamos`; si el prestamo 
 
 ---
 
+## Pruebas Unitarias - Hito 3
+
+Se integraron pruebas unitarias reutilizables por capas en cinco microservicios:
+
+| Microservicio | Modelo | Repositorio | Servicio | Controlador | Total verificado |
+|:--|--:|--:|--:|--:|--:|
+| ms-catalogo | 3 | 4 | 5 | 4 | 17 |
+| ms-sucursales | 3 | 3 | 5 | 4 | 16 |
+| ms-reservas | 3 | 3 | 6 | 4 | 17 |
+| ms-devoluciones | 3 | 3 | 5 | 4 | 16 |
+| ms-prestamos | 4 | 4 | 5 | 5 | 19 |
+
+Total verificado: 85 tests, 0 fallas, 0 errores.
+
+Herramientas usadas:
+
+- JUnit 5 para modelo y reglas de negocio.
+- Mockito para aislar servicios y clientes Feign.
+- MockMvc para controladores REST.
+- `@DataJpaTest` con H2 para repositorios.
+- Maven para ejecucion repetible.
+
+Comandos de ejecucion:
+
+```powershell
+cd codigo-fuente/ms-catalogo
+mvn test
+
+cd ../ms-sucursales
+mvn test
+
+cd ../ms-reservas
+mvn test
+
+cd ../ms-devoluciones
+mvn test
+
+cd ../ms-prestamos
+mvn test
+```
+
+Documentacion del hito:
+
+```text
+TESTING_PLAN.md
+evidencias/testing/comandos-ejecucion.md
+evidencias/testing/resumen-cobertura.md
+```
+
+Para la evidencia visual de la presentacion, abrir en VS Code el arbol `src/test/java` y ejecutar `mvn test` en terminal. La captura debe mostrar `Failures: 0`, `Errors: 0` y `BUILD SUCCESS`.
+
+---
+
 ## Pruebas Empiricas Realizadas
 
 Por limitacion de recursos locales, las pruebas se ejecutaron de forma incremental: se levantaron solo los microservicios necesarios para cada escenario y luego se apagaron antes de continuar. Esta estrategia evita sobrecargar el equipo y mantiene las pruebas controladas.
