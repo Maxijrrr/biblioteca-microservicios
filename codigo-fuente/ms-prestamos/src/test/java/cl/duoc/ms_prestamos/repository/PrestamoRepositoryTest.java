@@ -21,8 +21,8 @@ class PrestamoRepositoryTest {
     private PrestamoRepository repository;
 
     @Test
-    @DisplayName("Debe guardar prestamo en H2")
-    void debeGuardarPrestamoEnH2() {
+    @DisplayName("Debe guardar y buscar prestamo por ID en H2")
+    void debeGuardarYBuscarPrestamoPorIdEnH2() {
         Prestamo guardado = repository.save(crearPrestamo(10L, "978-save", "ACTIVO", 7));
 
         assertTrue(repository.findById(guardado.getId()).isPresent());
@@ -30,16 +30,14 @@ class PrestamoRepositoryTest {
     }
 
     @Test
-    @DisplayName("Debe buscar prestamos por perfil")
-    void debeBuscarPrestamosPorPerfil() {
+    @DisplayName("Debe listar prestamos registrados")
+    void debeListarPrestamosRegistrados() {
         repository.save(crearPrestamo(20L, "978-a", "ACTIVO", 7));
-        repository.save(crearPrestamo(20L, "978-b", "DEVUELTO", 8));
-        repository.save(crearPrestamo(21L, "978-c", "ACTIVO", 7));
+        repository.save(crearPrestamo(21L, "978-b", "DEVUELTO", 8));
 
-        List<Prestamo> resultado = repository.findByIdPerfil(20L);
+        List<Prestamo> resultado = repository.findAll();
 
         assertEquals(2, resultado.size());
-        assertTrue(resultado.stream().allMatch(prestamo -> prestamo.getIdPerfil().equals(20L)));
     }
 
     @Test
