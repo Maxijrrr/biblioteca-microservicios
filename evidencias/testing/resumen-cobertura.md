@@ -1,6 +1,6 @@
 # Resumen De Cobertura De Pruebas
 
-Verificacion ejecutada el 2026-06-08 con Java 21 y Maven 3.9.12.
+Verificacion final ejecutada el 2026-06-15 en EC2 con Java 21.0.10 y Maven 3.8.7. Los microservicios se probaron uno por uno.
 
 | Microservicio | Modelo | Repositorio | Servicio | Controlador | Contexto Spring | Total Maven | Estado |
 |:--|--:|--:|--:|--:|--:|--:|:--:|

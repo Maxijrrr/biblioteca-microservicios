@@ -53,7 +53,7 @@ Se unifico `ms-catalogo`, `ms-sucursales` y `ms-reservas` a Spring Boot `3.2.5`,
 
 ## Resultados Verificados
 
-Verificacion ejecutada el 2026-06-08 con Java 21 y Maven 3.9.12:
+Verificacion final ejecutada el 2026-06-15 en EC2 con Java 21.0.10 y Maven 3.8.7. Cada microservicio se probo por separado:
 
 | Microservicio | Tests | Fallas | Errores | Estado |
 |:--|--:|--:|--:|:--:|

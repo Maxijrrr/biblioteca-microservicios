@@ -1,4 +1,4 @@
-# Sistema de Gestion Bibliotecaria - Hito 2
+# Sistema de Gestion Bibliotecaria - Hitos 2 y 3
 
 Sistema de gestion bibliotecaria construido con arquitectura de microservicios, Spring Boot, Docker Compose y MySQL. El proyecto aplica el patron Database per Service: cada microservicio tiene su propia base de datos y no accede directamente a la base de otro servicio.
 
@@ -133,17 +133,19 @@ Resultado esperado: `ms-devoluciones` consulta a `ms-prestamos`; si el prestamo 
 
 ## Pruebas Unitarias - Hito 3
 
-Se integraron pruebas unitarias reutilizables por capas en cinco microservicios:
+Se integraron pruebas unitarias reutilizables por capas en los cinco microservicios exigidos por la rubrica:
 
-| Microservicio | Modelo | Repositorio | Servicio | Controlador | Total verificado |
-|:--|--:|--:|--:|--:|--:|
-| ms-catalogo | 3 | 4 | 5 | 4 | 17 |
-| ms-sucursales | 3 | 3 | 5 | 4 | 16 |
-| ms-reservas | 3 | 3 | 6 | 4 | 17 |
-| ms-devoluciones | 3 | 3 | 5 | 4 | 16 |
-| ms-prestamos | 4 | 4 | 5 | 5 | 19 |
+| Microservicio | Modelo | Repositorio | Servicio | Controlador | Contexto | Total Maven |
+|:--|--:|--:|--:|--:|--:|--:|
+| ms-catalogo | 3 | 4 | 5 | 4 | 1 | 17 |
+| ms-sucursales | 3 | 3 | 5 | 4 | 1 | 16 |
+| ms-reservas | 3 | 3 | 6 | 4 | 1 | 17 |
+| ms-devoluciones | 3 | 3 | 5 | 4 | 1 | 16 |
+| ms-prestamos | 4 | 4 | 5 | 5 | 1 | 19 |
 
 Total verificado: 85 tests, 0 fallas, 0 errores.
+
+La columna `Contexto` corresponde al `contextLoads` generado por Spring Boot. El cumplimiento de las cuatro capas se acredita con los tests de modelo, repositorio, servicio y controlador, sin depender de ese test adicional.
 
 Herramientas usadas:
 
@@ -152,6 +154,39 @@ Herramientas usadas:
 - MockMvc para controladores REST.
 - `@DataJpaTest` con H2 para repositorios.
 - Maven para ejecucion repetible.
+
+### Que valida cada clase y por que cumple
+
+Todos los metodos usan nombres descriptivos y estructura Arrange / Act / Assert. Los servicios se prueban aislados con Mockito, los controladores con `MockMvcBuilders.standaloneSetup` y los repositorios contra H2 mediante `@DataJpaTest`.
+
+| Microservicio | Clase | Tests | Que valida | Por que cumple |
+|:--|:--|--:|:--|:--|
+| ms-catalogo | `LibroTest` | 3 | Constructor vacio y completo, getters/setters, `equals` y `hashCode`. | Cubre la entidad JPA con JUnit 5 puro. |
+| ms-catalogo | `LibroRepositoryTest` | 4 | `save`, `findById`, `findAll` y busqueda por ISBN sobre H2. | Ejecuta CRUD SQL real y una consulta personalizada con `@DataJpaTest`. |
+| ms-catalogo | `LibroServiceImplTest` | 5 | Listado, busqueda exitosa, recurso inexistente, guardado y eliminacion. | Aisla la logica con `@Mock` e `@InjectMocks` y verifica errores controlados. |
+| ms-catalogo | `LibroControllerTest` | 4 | Respuestas HTTP 200, 201, 404 y 400 con JSON. | Prueba el contrato REST con MockMvc standalone. |
+| ms-sucursales | `SucursalTest` | 3 | Constructor vacio y completo, getters/setters, `equals` y `hashCode`. | Cubre la entidad JPA con JUnit 5 puro. |
+| ms-sucursales | `SucursalRepositoryTest` | 3 | `save`, `findById` y `findAll` sobre H2. | Cumple el minimo CRUD real exigido para repositorio. |
+| ms-sucursales | `SucursalServiceImplTest` | 5 | Listado, busqueda, 404 logico, guardado y eliminacion. | Valida la logica de negocio sin base de datos real mediante Mockito. |
+| ms-sucursales | `SucursalControllerTest` | 4 | Respuestas HTTP 200, 201, 404 y 400. | Verifica estados y validacion del controlador con MockMvc standalone. |
+| ms-reservas | `ReservaTest` | 3 | Constructor vacio y completo, getters/setters, `equals` y `hashCode`. | Cubre la entidad JPA con JUnit 5 puro. |
+| ms-reservas | `ReservaRepositoryTest` | 3 | `save`, `findById` y `findAll` sobre H2. | Cumple las operaciones CRUD reales solicitadas. |
+| ms-reservas | `ReservaServiceImplTest` | 6 | Listado, busqueda, guardado, eliminacion y errores por inexistencia. | Prueba casos felices y excepciones con repositorio mockeado. |
+| ms-reservas | `ReservaControllerTest` | 4 | Respuestas HTTP 200, 201, 404 y 400. | Valida el contrato REST y el cuerpo procesado sin levantar servidor. |
+| ms-devoluciones | `DevolucionTest` | 3 | Constructor vacio y completo, getters/setters, `equals` y `hashCode`. | Cubre la entidad JPA con JUnit 5 puro. |
+| ms-devoluciones | `DevolucionRepositoryTest` | 3 | `save`, `findById` y `findAll` sobre H2. | Verifica persistencia SQL aislada con `@DataJpaTest`. |
+| ms-devoluciones | `DevolucionServiceImplTest` | 5 | Prestamo activo, prestamo no activo, busqueda, 404 logico y eliminacion. | Aisla repositorio y cliente Feign con Mockito para probar la regla de negocio. |
+| ms-devoluciones | `DevolucionControllerTest` | 4 | Respuestas HTTP 200, 201, 404 y 400. | Verifica endpoints y validacion con MockMvc standalone. |
+| ms-prestamos | `PrestamoTest` | 4 | Constructores, setters/getters, campos nulos, `equals` y `hashCode`. | Supera el minimo de pruebas de modelo con JUnit 5 puro. |
+| ms-prestamos | `PrestamoRepositoryTest` | 4 | Guardado y consultas por perfil, ISBN y prestamos vencidos. | Verifica SQL real y consultas de dominio sobre H2. |
+| ms-prestamos | `PrestamoServiceTest` | 5 | Perfil valido, stock disponible, falta de stock, busqueda y listado. | Mockea repositorio y clientes Feign para aislar la logica principal. |
+| ms-prestamos | `PrestamoControllerTest` | 5 | Respuestas HTTP 200, 201, 404 y 400, incluido renovar prestamo. | Prueba estados y JSON del API con MockMvc standalone. |
+
+Si una regla productiva se rompe, los asserts dejan de coincidir, las verificaciones Mockito detectan interacciones incorrectas o MockMvc devuelve un estado/cuerpo distinto; Maven termina entonces con `BUILD FAILURE`. Por ello no son tests vacios ni asserts que siempre pasan.
+
+### Verificacion final en EC2
+
+El 2026-06-15 se ejecutaron los cinco comandos `mvn test` uno por uno en la instancia EC2, con Java 21.0.10 y Maven 3.8.7. Los cinco finalizaron con `BUILD SUCCESS`: 85 tests, 0 fallas y 0 errores. No se levantaron aplicaciones Spring para esta verificacion.
 
 Comandos de ejecucion:
 
