@@ -1,4 +1,4 @@
-# Sistema de Gestion Bibliotecaria - Hitos 2 y 3
+# Sistema de Gestion Bibliotecaria - EP3 Semana 15
 
 Sistema de gestion bibliotecaria construido con arquitectura de microservicios, Spring Boot, Docker Compose y MySQL. El proyecto aplica el patron Database per Service: cada microservicio tiene su propia base de datos y no accede directamente a la base de otro servicio.
 
@@ -12,7 +12,7 @@ Repositorio: https://github.com/Maxijrrr/biblioteca-microservicios
 |:--|:--|
 | Maximiliano Valenzuela | ms-autenticador, ms-ebooks, ms-prestamos |
 | Genesis Cerda | ms-perfiles, ms-inventario, ms-penalizaciones |
-| Vicente Hueichapan | ms-catalogo, ms-delociones, ms-reservas, ms-sucursales |
+| Vicente Hueichapan | ms-catalogo, ms-devoluciones, ms-reservas, ms-sucursales |
 
 ---
 
@@ -30,6 +30,25 @@ Repositorio: https://github.com/Maxijrrr/biblioteca-microservicios
 | ms-prestamos | 8087 | db_prestamos | 3313 | Prestamos de libros |
 | ms-reservas | 8088 | db_reservas | 3314 | Reservas |
 | ms-sucursales | 8089 | db_sucursales | 3315 | Sucursales fisicas |
+| api-gateway | 8090 | No aplica | No aplica | Enrutamiento HTTP hacia microservicios |
+
+---
+
+## Checklist EP3 Semana 15
+
+| Requisito docente | Estado en repositorio |
+|:--|:--:|
+| Pruebas de modelo, servicio, controlador y repositorio en 5 microservicios | Cumplido |
+| Controlador con `MockMvc.standaloneSetup`, HTTP 200, 201 y 404 | Cumplido |
+| Repositorio con `@DataJpaTest`, H2, `save`, `findById` y `findAll` | Cumplido |
+| `./mvnw test` ejecutable por microservicio | Cumplido |
+| `springdoc-openapi-starter-webmvc-ui` en los 5 microservicios evaluados | Cumplido |
+| Swagger UI en `/swagger-ui/index.html` | Cumplido |
+| Endpoints principales con `@Operation` y minimo 2 `@ApiResponse` | Cumplido |
+| Modulo `api-gateway` con `pom.xml` | Cumplido |
+| `application.yml` del Gateway con rutas hacia minimo 3 microservicios | Cumplido |
+| README con integrantes, microservicios, Swagger e instrucciones | Cumplido |
+| PPT minimo 11 diapositivas y capturas reales | Pendiente de generar |
 
 ---
 
@@ -88,6 +107,56 @@ graph TD
 | Errores controlados | `@RestControllerAdvice` y excepciones personalizadas |
 | Logs | SLF4J en llamadas externas, validaciones y fallos |
 | Arranque DB | `healthcheck`, `depends_on: condition: service_healthy` y tolerancia Hikari |
+
+---
+
+## Swagger / OpenAPI - EP3
+
+Los cinco microservicios evaluados para EP3 tienen Springdoc OpenAPI agregado en su `pom.xml` y exponen Swagger UI en `/swagger-ui/index.html`. Los controladores principales documentan sus endpoints con `@Operation(summary = "...")` y `@ApiResponses`.
+
+| Microservicio | URL Swagger local |
+|:--|:--|
+| ms-catalogo | `http://localhost:8081/swagger-ui/index.html` |
+| ms-devoluciones | `http://localhost:8082/swagger-ui/index.html` |
+| ms-prestamos | `http://localhost:8087/swagger-ui/index.html` |
+| ms-reservas | `http://localhost:8088/swagger-ui/index.html` |
+| ms-sucursales | `http://localhost:8089/swagger-ui/index.html` |
+
+Ejemplo de ejecucion para revisar Swagger de un servicio:
+
+```bash
+cd codigo-fuente/ms-catalogo
+./mvnw spring-boot:run
+```
+
+Luego abrir `http://localhost:8081/swagger-ui/index.html`.
+
+---
+
+## API Gateway - Preparacion Examen
+
+El modulo `codigo-fuente/api-gateway` fue creado como entrada unica HTTP para enrutar hacia los microservicios evaluados. Escucha en el puerto `8090` y usa rutas por path.
+
+| Ruta Gateway | Destino local |
+|:--|:--|
+| `/api/catalogo/**` | `http://localhost:8081` |
+| `/api/devoluciones/**` | `http://localhost:8082` |
+| `/api/v1/prestamos/**` | `http://localhost:8087` |
+| `/api/reservas/**` | `http://localhost:8088` |
+| `/api/sucursales/**` | `http://localhost:8089` |
+
+Ejecucion del Gateway:
+
+```bash
+cd codigo-fuente/api-gateway
+./mvnw spring-boot:run
+```
+
+Ejemplo de llamada a traves del Gateway:
+
+```bash
+curl http://localhost:8090/api/catalogo/libros
+```
 
 ---
 
@@ -178,7 +247,7 @@ Todos los metodos usan nombres descriptivos y estructura Arrange / Act / Assert.
 | ms-devoluciones | `DevolucionServiceImplTest` | 5 | Prestamo activo, prestamo no activo, busqueda, 404 logico y eliminacion. | Aisla repositorio y cliente Feign con Mockito para probar la regla de negocio. |
 | ms-devoluciones | `DevolucionControllerTest` | 4 | Respuestas HTTP 200, 201, 404 y 400. | Verifica endpoints y validacion con MockMvc standalone. |
 | ms-prestamos | `PrestamoTest` | 4 | Constructores, setters/getters, campos nulos, `equals` y `hashCode`. | Supera el minimo de pruebas de modelo con JUnit 5 puro. |
-| ms-prestamos | `PrestamoRepositoryTest` | 4 | Guardado y consultas por perfil, ISBN y prestamos vencidos. | Verifica SQL real y consultas de dominio sobre H2. |
+| ms-prestamos | `PrestamoRepositoryTest` | 4 | `save`, `findById`, `findAll` y consultas por ISBN/prestamos vencidos. | Verifica SQL real, CRUD minimo exigido y consultas de dominio sobre H2. |
 | ms-prestamos | `PrestamoServiceTest` | 5 | Perfil valido, stock disponible, falta de stock, busqueda y listado. | Mockea repositorio y clientes Feign para aislar la logica principal. |
 | ms-prestamos | `PrestamoControllerTest` | 5 | Respuestas HTTP 200, 201, 404 y 400, incluido renovar prestamo. | Prueba estados y JSON del API con MockMvc standalone. |
 
@@ -186,25 +255,30 @@ Si una regla productiva se rompe, los asserts dejan de coincidir, las verificaci
 
 ### Verificacion final en EC2
 
-El 2026-06-15 se ejecutaron los cinco comandos `mvn test` uno por uno en la instancia EC2, con Java 21.0.10 y Maven 3.8.7. Los cinco finalizaron con `BUILD SUCCESS`: 85 tests, 0 fallas y 0 errores. No se levantaron aplicaciones Spring para esta verificacion.
+El 2026-06-15 se ejecutaron los cinco comandos de prueba uno por uno en la instancia EC2, con Java 21.0.10 y Maven 3.8.7. Los cinco finalizaron con `BUILD SUCCESS`: 85 tests, 0 fallas y 0 errores. No se levantaron aplicaciones Spring para esta verificacion.
+
+El 2026-06-18 se repitio verificacion local con Java 21.0.10 y Maven 3.9.12 despues de integrar Swagger y Gateway. Los cinco microservicios finalizaron con `BUILD SUCCESS` y el `api-gateway` finalizo con `BUILD SUCCESS` adicional. Para la entrega final de Semana 15 se usa `./mvnw test` como comando estandar de Linux/EC2.
 
 Comandos de ejecucion:
 
 ```powershell
 cd codigo-fuente/ms-catalogo
-mvn test
+./mvnw test
 
 cd ../ms-sucursales
-mvn test
+./mvnw test
 
 cd ../ms-reservas
-mvn test
+./mvnw test
 
 cd ../ms-devoluciones
-mvn test
+./mvnw test
 
 cd ../ms-prestamos
-mvn test
+./mvnw test
+
+cd ../api-gateway
+./mvnw test
 ```
 
 Documentacion del hito:
@@ -215,7 +289,7 @@ evidencias/testing/comandos-ejecucion.md
 evidencias/testing/resumen-cobertura.md
 ```
 
-Para la evidencia visual de la presentacion, abrir en VS Code el arbol `src/test/java` y ejecutar `mvn test` en terminal. La captura debe mostrar `Failures: 0`, `Errors: 0` y `BUILD SUCCESS`.
+Para la evidencia visual de la presentacion, abrir en VS Code el arbol `src/test/java` y ejecutar `./mvnw test` en terminal. La captura debe mostrar `Failures: 0`, `Errors: 0` y `BUILD SUCCESS`.
 
 ---
 
@@ -318,6 +392,7 @@ biblioteca-microservicios/
 |-- postman/
 |   `-- hito2-integracion.json
 `-- codigo-fuente/
+    |-- api-gateway/
     |-- ms-autenticador/
     |-- ms-catalogo/
     |-- ms-devoluciones/

@@ -6,29 +6,33 @@ Ejecutar desde la raiz del repositorio.
 
 ```powershell
 cd codigo-fuente/ms-catalogo
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-sucursales
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-reservas
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-devoluciones
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-prestamos
-mvn test
+.\mvnw.cmd test
+
+cd ../api-gateway
+.\mvnw.cmd test
 ```
 
 ## Linux / EC2
 
 ```bash
-cd codigo-fuente/ms-catalogo && mvn test
-cd ../ms-sucursales && mvn test
-cd ../ms-reservas && mvn test
-cd ../ms-devoluciones && mvn test
-cd ../ms-prestamos && mvn test
+cd codigo-fuente/ms-catalogo && ./mvnw test
+cd ../ms-sucursales && ./mvnw test
+cd ../ms-reservas && ./mvnw test
+cd ../ms-devoluciones && ./mvnw test
+cd ../ms-prestamos && ./mvnw test
+cd ../api-gateway && ./mvnw test
 ```
 
 ## Capturas Recomendadas
@@ -37,10 +41,12 @@ Para la presentacion, capturar:
 
 - Arbol de carpetas `src/test/java` de `ms-prestamos`.
 - Codigo abierto de `PrestamoServiceTest.java`.
-- Terminal con `mvn test` y `BUILD SUCCESS` de `ms-prestamos`.
+- Terminal con `./mvnw test` y `BUILD SUCCESS` de `ms-prestamos`.
 - Arbol de carpetas `src/test/java` de `ms-catalogo` o `ms-sucursales`.
 - Codigo abierto de un `RepositoryTest` con `@DataJpaTest`.
-- Terminal con `mvn test` y `BUILD SUCCESS` del segundo microservicio.
+- Terminal con `./mvnw test` y `BUILD SUCCESS` del segundo microservicio.
+- Navegador con Swagger UI abierto en `/swagger-ui/index.html`.
+- `application.yml` del `api-gateway` con rutas visibles.
 
 Texto esperado en terminal:
 

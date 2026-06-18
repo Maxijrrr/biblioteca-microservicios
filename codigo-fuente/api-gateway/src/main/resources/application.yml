@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: ms-catalogo
+          uri: ${CATALOGO_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/catalogo/**
+        - id: ms-devoluciones
+          uri: ${DEVOLUCIONES_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/devoluciones/**
+        - id: ms-prestamos
+          uri: ${PRESTAMOS_URL:http://localhost:8087}
+          predicates:
+            - Path=/api/v1/prestamos/**
+        - id: ms-reservas
+          uri: ${RESERVAS_URL:http://localhost:8088}
+          predicates:
+            - Path=/api/reservas/**
+        - id: ms-sucursales
+          uri: ${SUCURSALES_URL:http://localhost:8089}
+          predicates:
+            - Path=/api/sucursales/**
+
+server:
+  port: 8090
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

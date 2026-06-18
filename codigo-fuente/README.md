@@ -13,17 +13,31 @@ Para ejecutar las pruebas unitarias del hito:
 
 ```powershell
 cd ms-catalogo
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-sucursales
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-reservas
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-devoluciones
-mvn test
+.\mvnw.cmd test
 
 cd ../ms-prestamos
-mvn test
+.\mvnw.cmd test
+
+cd ../api-gateway
+.\mvnw.cmd test
+```
+
+En Linux o EC2:
+
+```bash
+cd ms-catalogo && ./mvnw test
+cd ../ms-sucursales && ./mvnw test
+cd ../ms-reservas && ./mvnw test
+cd ../ms-devoluciones && ./mvnw test
+cd ../ms-prestamos && ./mvnw test
+cd ../api-gateway && ./mvnw test
 ```

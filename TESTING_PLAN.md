@@ -71,19 +71,19 @@ Desde la raiz del repositorio:
 
 ```powershell
 cd codigo-fuente/ms-catalogo
-mvn test
+./mvnw test
 
 cd ../ms-sucursales
-mvn test
+./mvnw test
 
 cd ../ms-reservas
-mvn test
+./mvnw test
 
 cd ../ms-devoluciones
-mvn test
+./mvnw test
 
 cd ../ms-prestamos
-mvn test
+./mvnw test
 ```
 
 En equipos sin Maven global, tambien puede usarse el wrapper del servicio si funciona en el entorno:
@@ -95,11 +95,11 @@ En equipos sin Maven global, tambien puede usarse el wrapper del servicio si fun
 En Linux o EC2:
 
 ```bash
-cd codigo-fuente/ms-catalogo && mvn test
-cd ../ms-sucursales && mvn test
-cd ../ms-reservas && mvn test
-cd ../ms-devoluciones && mvn test
-cd ../ms-prestamos && mvn test
+cd codigo-fuente/ms-catalogo && ./mvnw test
+cd ../ms-sucursales && ./mvnw test
+cd ../ms-reservas && ./mvnw test
+cd ../ms-devoluciones && ./mvnw test
+cd ../ms-prestamos && ./mvnw test
 ```
 
 ## Evidencia Recomendada Para Presentacion

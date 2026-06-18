@@ -1,6 +1,8 @@
-# Resumen De Cobertura De Pruebas
+# Resumen De Cobertura De Pruebas - EP3 Semana 15
 
-Verificacion final ejecutada el 2026-06-15 en EC2 con Java 21.0.10 y Maven 3.8.7. Los microservicios se probaron uno por uno.
+Verificacion base ejecutada el 2026-06-15 en EC2 con Java 21.0.10 y Maven 3.8.7. Los microservicios se probaron uno por uno. Para el cierre de Semana 15, el comando estandar documentado es `./mvnw test` en Linux/EC2.
+
+Verificacion local actualizada el 2026-06-18 con Java 21.0.10 y Maven 3.9.12: los cinco microservicios y el `api-gateway` finalizaron con `BUILD SUCCESS`.
 
 | Microservicio | Modelo | Repositorio | Servicio | Controlador | Contexto Spring | Total Maven | Estado |
 |:--|--:|--:|--:|--:|--:|--:|:--:|
@@ -10,7 +12,20 @@ Verificacion final ejecutada el 2026-06-15 en EC2 con Java 21.0.10 y Maven 3.8.7
 | ms-devoluciones | 3 | 3 | 5 | 4 | 1 | 16 | BUILD SUCCESS |
 | ms-prestamos | 4 | 4 | 5 | 5 | 1 | 19 | BUILD SUCCESS |
 
-Total: 85 tests ejecutados, 0 fallas, 0 errores.
+Total microservicios: 85 tests ejecutados, 0 fallas, 0 errores.
+
+Total adicional Gateway: 1 test ejecutado, 0 fallas, 0 errores.
+
+## Swagger Y Gateway
+
+| Elemento | Estado | Evidencia tecnica |
+|:--|:--:|:--|
+| Springdoc en `ms-catalogo` | Integrado | `pom.xml`, `application.properties`, `LibroController.java` |
+| Springdoc en `ms-sucursales` | Integrado | `pom.xml`, `application.properties`, `SucursalController.java` |
+| Springdoc en `ms-reservas` | Integrado | `pom.xml`, `application.properties`, `ReservaController.java` |
+| Springdoc en `ms-devoluciones` | Integrado | `pom.xml`, `application.properties`, `DevolucionController.java` |
+| Springdoc en `ms-prestamos` | Integrado | `pom.xml`, `application.properties`, `PrestamoController.java` |
+| API Gateway | Integrado | `codigo-fuente/api-gateway/application.yml` con 5 rutas |
 
 ## Archivos Principales Para Revisar
 
