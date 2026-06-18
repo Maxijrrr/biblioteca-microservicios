@@ -394,33 +394,23 @@ services:
         condition: service_healthy
     networks:
       - red_interna_proyecto
-  ms-gateway:
-      build: ./codigo-fuente/ms-gateway
-      container_name: ms-gateway
-      ports:
-        - "8090:8090"
-      environment:
-        - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
-        - AUTENTICADOR_URL=http://ms-autenticador:8080
-        - CATALOGO_URL=http://ms-catalogo:8081
-        - DEVOLUCIONES_URL=http://ms-devoluciones:8082
-        - EBOOKS_URL=http://ms-ebooks:8083
-        - INVENTARIO_URL=http://ms-inventario:8084
-        - PENALIZACIONES_URL=http://ms-penalizaciones:8085
-        - PERFILES_URL=http://ms-perfiles:8086
-        - PRESTAMOS_URL=http://ms-prestamos:8087
-        - RESERVAS_URL=http://ms-reservas:8088
-        - SUCURSALES_URL=http://ms-sucursales:8089
-      depends_on:
-        - ms-autenticador
-        - ms-catalogo
-        - ms-devoluciones
-        - ms-ebooks
-        - ms-inventario
-        - ms-penalizaciones
-        - ms-perfiles
-        - ms-prestamos
-        - ms-reservas
-        - ms-sucursales
-      networks:
-        - red_interna_proyecto
+  api-gateway:
+    build: ./codigo-fuente/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8090:8090"
+    environment:
+      - JAVA_TOOL_OPTIONS=-Xms64m -Xmx256m
+      - CATALOGO_URL=http://ms-catalogo:8081
+      - DEVOLUCIONES_URL=http://ms-devoluciones:8082
+      - PRESTAMOS_URL=http://ms-prestamos:8087
+      - RESERVAS_URL=http://ms-reservas:8088
+      - SUCURSALES_URL=http://ms-sucursales:8089
+    depends_on:
+      - ms-catalogo
+      - ms-devoluciones
+      - ms-prestamos
+      - ms-reservas
+      - ms-sucursales
+    networks:
+      - red_interna_proyecto
