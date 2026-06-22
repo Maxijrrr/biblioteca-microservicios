@@ -214,7 +214,7 @@ Se integraron pruebas unitarias reutilizables por capas en los cinco microservic
 | ms-prestamos | 4 | 4 | 5 | 5 | 1 | 19 |
 | ms-autenticador | 3 | 4 | 6 | 4 | 1 | 18 |
 
-Total verificado: 85 tests, 0 fallas, 0 errores.
+Total verificado: 103 tests, 0 fallas, 0 errores.
 
 La columna `Contexto` corresponde al `contextLoads` generado por Spring Boot. El cumplimiento de las cuatro capas se acredita con los tests de modelo, repositorio, servicio y controlador, sin depender de ese test adicional.
 
