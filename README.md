@@ -116,6 +116,7 @@ Los cinco microservicios evaluados para EP3 tienen Springdoc OpenAPI agregado en
 
 | Microservicio | URL Swagger local |
 |:--|:--|
+| ms-autenticador | `http://localhost:8080/swagger-ui/index.html` |
 | ms-catalogo | `http://localhost:8081/swagger-ui/index.html` |
 | ms-devoluciones | `http://localhost:8082/swagger-ui/index.html` |
 | ms-prestamos | `http://localhost:8087/swagger-ui/index.html` |
@@ -211,6 +212,7 @@ Se integraron pruebas unitarias reutilizables por capas en los cinco microservic
 | ms-reservas | 3 | 3 | 6 | 4 | 1 | 17 |
 | ms-devoluciones | 3 | 3 | 5 | 4 | 1 | 16 |
 | ms-prestamos | 4 | 4 | 5 | 5 | 1 | 19 |
+| ms-autenticador | 3 | 4 | 6 | 4 | 1 | 18 |
 
 Total verificado: 85 tests, 0 fallas, 0 errores.
 
